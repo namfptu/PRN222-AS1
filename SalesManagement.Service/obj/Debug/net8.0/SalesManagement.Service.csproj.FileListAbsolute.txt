@@ -1,0 +1,11 @@
+G:\SalesManagementSystem\SalesManagement.Service\bin\Debug\net8.0\SalesManagement.Service.deps.json
+G:\SalesManagementSystem\SalesManagement.Service\bin\Debug\net8.0\SalesManagement.Service.dll
+G:\SalesManagementSystem\SalesManagement.Service\bin\Debug\net8.0\SalesManagement.Service.pdb
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.GeneratedMSBuildEditorConfig.editorconfig
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.AssemblyInfoInputs.cache
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.AssemblyInfo.cs
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.csproj.CoreCompileInputs.cache
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.dll
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\refint\SalesManagement.Service.dll
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.pdb
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\ref\SalesManagement.Service.dll
