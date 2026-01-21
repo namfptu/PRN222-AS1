@@ -13,3 +13,4 @@ G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.R
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\refint\SalesManagement.Repo.dll
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.pdb
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\ref\SalesManagement.Repo.dll
+G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.sourcelink.json

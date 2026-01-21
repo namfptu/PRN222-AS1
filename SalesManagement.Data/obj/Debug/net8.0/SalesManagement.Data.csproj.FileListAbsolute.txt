@@ -7,6 +7,7 @@ G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.D
 G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.Data.AssemblyInfoInputs.cache
 G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.Data.AssemblyInfo.cs
 G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.Data.csproj.CoreCompileInputs.cache
+G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.Data.sourcelink.json
 G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.Data.dll
 G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\refint\SalesManagement.Data.dll
 G:\SalesManagementSystem\SalesManagement.Data\obj\Debug\net8.0\SalesManagement.Data.pdb

@@ -17,7 +17,7 @@ namespace SalesManagement.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -57,26 +57,6 @@ namespace SalesManagement.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Email = "admin@electronics.com",
-                            FullName = "System Administrator",
-                            IsActive = true,
-                            Password = "admin123",
-                            Role = 1
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "staff@electronics.com",
-                            FullName = "Staff Demo",
-                            IsActive = true,
-                            Password = "staff123",
-                            Role = 2
-                        });
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Category", b =>
@@ -102,43 +82,6 @@ namespace SalesManagement.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Description = "Mobile phones and accessories",
-                            Name = "Smartphones",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Description = "Notebooks and laptops",
-                            Name = "Laptops",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Description = "Tablets and e-readers",
-                            Name = "Tablets",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Description = "Electronics accessories",
-                            Name = "Accessories",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Description = "Speakers, headphones, earbuds",
-                            Name = "Audio",
-                            Status = true
-                        });
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Customer", b =>
@@ -179,28 +122,6 @@ namespace SalesManagement.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Customers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "123 Nguyễn Huệ, Q.1, TP.HCM",
-                            CreatedDate = new DateTime(2026, 1, 14, 22, 14, 49, 30, DateTimeKind.Local).AddTicks(6571),
-                            Email = "nguyenvana@gmail.com",
-                            FullName = "Nguyễn Văn A",
-                            Phone = "0901234567",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "456 Lê Lợi, Q.3, TP.HCM",
-                            CreatedDate = new DateTime(2026, 1, 14, 22, 14, 49, 30, DateTimeKind.Local).AddTicks(6582),
-                            Email = "tranthib@gmail.com",
-                            FullName = "Trần Thị B",
-                            Phone = "0902345678",
-                            Status = true
-                        });
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.ImportOrder", b =>
@@ -210,6 +131,9 @@ namespace SalesManagement.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("AccountId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -236,6 +160,8 @@ namespace SalesManagement.Data.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccountId");
 
                     b.HasIndex("Code")
                         .IsUnique();
@@ -395,68 +321,6 @@ namespace SalesManagement.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CategoryId = 1,
-                            Code = "IP15PM",
-                            Description = "iPhone 15 Pro Max 256GB",
-                            ImageUrl = "/images/products/iphone15promax.jpg",
-                            Name = "iPhone 15 Pro Max",
-                            Price = 32990000m,
-                            Quantity = 50,
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CategoryId = 1,
-                            Code = "SS24U",
-                            Description = "Samsung Galaxy S24 Ultra 256GB",
-                            ImageUrl = "/images/products/galaxys24ultra.jpg",
-                            Name = "Samsung Galaxy S24 Ultra",
-                            Price = 29990000m,
-                            Quantity = 40,
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CategoryId = 2,
-                            Code = "MBP14M3",
-                            Description = "MacBook Pro 14 inch M3 chip",
-                            ImageUrl = "/images/products/macbookpro14.jpg",
-                            Name = "MacBook Pro 14 M3",
-                            Price = 49990000m,
-                            Quantity = 25,
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 4,
-                            CategoryId = 3,
-                            Code = "IPADPRO12",
-                            Description = "iPad Pro 12.9 inch M2 chip",
-                            ImageUrl = "/images/products/ipadpro.jpg",
-                            Name = "iPad Pro 12.9 M2",
-                            Price = 28990000m,
-                            Quantity = 30,
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 5,
-                            CategoryId = 5,
-                            Code = "APP2",
-                            Description = "AirPods Pro thế hệ 2",
-                            ImageUrl = "/images/products/airpodspro2.jpg",
-                            Name = "AirPods Pro 2",
-                            Price = 5990000m,
-                            Quantity = 100,
-                            Status = true
-                        });
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Supplier", b =>
@@ -491,39 +355,14 @@ namespace SalesManagement.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "Tòa nhà Bitexco, Q.1, TP.HCM",
-                            CompanyName = "Apple Vietnam",
-                            ContactPhone = "028-1234-5678",
-                            Email = "supply@apple.vn",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "KCN Thái Nguyên, Thái Nguyên",
-                            CompanyName = "Samsung Electronics Vietnam",
-                            ContactPhone = "028-2345-6789",
-                            Email = "supply@samsung.vn",
-                            Status = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Address = "Q.7, TP.HCM",
-                            CompanyName = "Sony Vietnam",
-                            ContactPhone = "028-3456-7890",
-                            Email = "supply@sony.vn",
-                            Status = true
-                        });
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.ImportOrder", b =>
                 {
+                    b.HasOne("SalesManagement.Data.Entities.Account", null)
+                        .WithMany("CreatedImportOrders")
+                        .HasForeignKey("AccountId");
+
                     b.HasOne("SalesManagement.Data.Entities.Account", "CreatedByAccount")
                         .WithMany()
                         .HasForeignKey("CreatedBy")
@@ -606,6 +445,11 @@ namespace SalesManagement.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("SalesManagement.Data.Entities.Account", b =>
+                {
+                    b.Navigation("CreatedImportOrders");
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Category", b =>

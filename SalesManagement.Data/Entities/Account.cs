@@ -33,6 +33,12 @@ namespace SalesManagement.Data.Entities
         /// IsActive: true = Active, false = Inactive
         /// </summary>
         public bool IsActive { get; set; } = true;
+
+        // Navigation properties
+        /// <summary>
+        /// Collection of Import Orders created by this account
+        /// </summary>
+        public virtual ICollection<ImportOrder> CreatedImportOrders { get; set; } = new List<ImportOrder>();
     }
 
     /// <summary>

@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace SalesManagement.Data.Migrations
 {
     /// <inheritdoc />
@@ -151,11 +149,17 @@ namespace SalesManagement.Data.Migrations
                     Status = table.Column<int>(type: "int", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     SupplierId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false)
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImportOrders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ImportOrders_Accounts_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "Accounts",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ImportOrders_Accounts_CreatedBy",
                         column: x => x.CreatedBy,
@@ -224,58 +228,6 @@ namespace SalesManagement.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Accounts",
-                columns: new[] { "Id", "Email", "FullName", "IsActive", "Password", "Role" },
-                values: new object[,]
-                {
-                    { 1, "admin@electronics.com", "System Administrator", true, "admin123", 1 },
-                    { 2, "staff@electronics.com", "Staff Demo", true, "staff123", 2 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Categories",
-                columns: new[] { "Id", "Description", "Name", "Status" },
-                values: new object[,]
-                {
-                    { 1, "Mobile phones and accessories", "Smartphones", true },
-                    { 2, "Notebooks and laptops", "Laptops", true },
-                    { 3, "Tablets and e-readers", "Tablets", true },
-                    { 4, "Electronics accessories", "Accessories", true },
-                    { 5, "Speakers, headphones, earbuds", "Audio", true }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Customers",
-                columns: new[] { "Id", "Address", "CreatedDate", "Email", "FullName", "Phone", "Status" },
-                values: new object[,]
-                {
-                    { 1, "123 Nguyễn Huệ, Q.1, TP.HCM", new DateTime(2026, 1, 14, 22, 14, 49, 30, DateTimeKind.Local).AddTicks(6571), "nguyenvana@gmail.com", "Nguyễn Văn A", "0901234567", true },
-                    { 2, "456 Lê Lợi, Q.3, TP.HCM", new DateTime(2026, 1, 14, 22, 14, 49, 30, DateTimeKind.Local).AddTicks(6582), "tranthib@gmail.com", "Trần Thị B", "0902345678", true }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Suppliers",
-                columns: new[] { "Id", "Address", "CompanyName", "ContactPhone", "Email", "Status" },
-                values: new object[,]
-                {
-                    { 1, "Tòa nhà Bitexco, Q.1, TP.HCM", "Apple Vietnam", "028-1234-5678", "supply@apple.vn", true },
-                    { 2, "KCN Thái Nguyên, Thái Nguyên", "Samsung Electronics Vietnam", "028-2345-6789", "supply@samsung.vn", true },
-                    { 3, "Q.7, TP.HCM", "Sony Vietnam", "028-3456-7890", "supply@sony.vn", true }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Products",
-                columns: new[] { "Id", "CategoryId", "Code", "Description", "ImageUrl", "Name", "Price", "Quantity", "Status" },
-                values: new object[,]
-                {
-                    { 1, 1, "IP15PM", "iPhone 15 Pro Max 256GB", "/images/products/iphone15promax.jpg", "iPhone 15 Pro Max", 32990000m, 50, true },
-                    { 2, 1, "SS24U", "Samsung Galaxy S24 Ultra 256GB", "/images/products/galaxys24ultra.jpg", "Samsung Galaxy S24 Ultra", 29990000m, 40, true },
-                    { 3, 2, "MBP14M3", "MacBook Pro 14 inch M3 chip", "/images/products/macbookpro14.jpg", "MacBook Pro 14 M3", 49990000m, 25, true },
-                    { 4, 3, "IPADPRO12", "iPad Pro 12.9 inch M2 chip", "/images/products/ipadpro.jpg", "iPad Pro 12.9 M2", 28990000m, 30, true },
-                    { 5, 5, "APP2", "AirPods Pro thế hệ 2", "/images/products/airpodspro2.jpg", "AirPods Pro 2", 5990000m, 100, true }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Accounts_Email",
                 table: "Accounts",
@@ -297,6 +249,11 @@ namespace SalesManagement.Data.Migrations
                 name: "IX_ImportOrderDetails_ProductId",
                 table: "ImportOrderDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ImportOrders_AccountId",
+                table: "ImportOrders",
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImportOrders_Code",
