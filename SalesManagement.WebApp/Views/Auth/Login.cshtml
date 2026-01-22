@@ -1,0 +1,74 @@
+@model SalesManagement.WebApp.Models.LoginViewModel
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Đăng nhập";
+}
+
+<!-- Sign In Start -->
+<div class="container-fluid">
+    <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+            <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+                <div class="d-flex align-items-center justify-content-between mb-3">
+                    <a href="/" class="">
+                        <h3 class="text-primary"><i class="fa fa-store me-2"></i>Sales MS</h3>
+                    </a>
+                    <h3>Đăng nhập</h3>
+                </div>
+
+                @* Hiển thị thông báo lỗi *@
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <div>@error.ErrorMessage</div>
+                        }
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
+                <form asp-action="Login" asp-controller="Auth" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Email" type="email" class="form-control" id="floatingEmail" placeholder="name@example.com">
+                        <label asp-for="Email">Email</label>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-floating mb-4">
+                        <input asp-for="Password" type="password" class="form-control" id="floatingPassword" placeholder="Mật khẩu">
+                        <label asp-for="Password">Mật khẩu</label>
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <div class="form-check">
+                            <input asp-for="RememberMe" type="checkbox" class="form-check-input" id="rememberMe">
+                            <label class="form-check-label" for="rememberMe">Ghi nhớ đăng nhập</label>
+                        </div>
+                        <a href="#">Quên mật khẩu?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary py-3 w-100 mb-4">
+                        <i class="fa fa-sign-in-alt me-2"></i>Đăng nhập
+                    </button>
+                </form>
+
+                <div class="text-center text-muted">
+                    <small>
+                        <i class="fa fa-info-circle me-1"></i>
+                        Liên hệ Admin nếu bạn chưa có tài khoản
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sign In End -->
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

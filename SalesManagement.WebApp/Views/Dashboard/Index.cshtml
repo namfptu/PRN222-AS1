@@ -1,0 +1,218 @@
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<!-- Sale & Revenue Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-line fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Doanh thu hôm nay</p>
+                    <h6 class="mb-0">@String.Format("{0:N0}", ViewBag.TodayRevenue) ₫</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-chart-bar fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Tổng doanh thu</p>
+                    <h6 class="mb-0">@String.Format("{0:N0}", ViewBag.TotalRevenue) ₫</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-shopping-cart fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Đơn hàng hôm nay</p>
+                    <h6 class="mb-0">@ViewBag.TodayOrders đơn</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-users fa-3x text-primary"></i>
+                <div class="ms-3">
+                    <p class="mb-2">Tổng khách hàng</p>
+                    <h6 class="mb-0">@ViewBag.TotalCustomers người</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Sale & Revenue End -->
+
+<!-- Quick Stats Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-secondary rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-box fa-3x text-white"></i>
+                <div class="ms-3 text-white">
+                    <p class="mb-2">Tổng sản phẩm</p>
+                    <h6 class="mb-0 text-white">@ViewBag.TotalProducts</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="bg-info rounded d-flex align-items-center justify-content-between p-4">
+                <i class="fa fa-clipboard-list fa-3x text-white"></i>
+                <div class="ms-3 text-white">
+                    <p class="mb-2">Tổng đơn hàng</p>
+                    <h6 class="mb-0 text-white">@ViewBag.TotalOrders</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Quick Stats End -->
+
+<!-- Recent Sales & Low Stock Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <!-- Recent Orders -->
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-light text-center rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h6 class="mb-0"><i class="fa fa-receipt me-2"></i>Đơn hàng gần đây</h6>
+                    <a href="@Url.Action("Index", "Order")">Xem tất cả</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                            <tr class="text-dark">
+                                <th scope="col">Mã đơn</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Tổng tiền</th>
+                                <th scope="col">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.RecentOrders != null)
+                            {
+                                foreach (var order in ViewBag.RecentOrders)
+                                {
+                                    <tr>
+                                        <td>@order.Code</td>
+                                        <td>@order.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@String.Format("{0:N0}", order.TotalAmount) ₫</td>
+                                        <td>
+                                            @switch ((int)order.Status)
+                                            {
+                                                case 0:
+                                                    <span class="badge bg-warning">Chờ xử lý</span>
+                                                    break;
+                                                case 1:
+                                                    <span class="badge bg-success">Hoàn thành</span>
+                                                    break;
+                                                case 2:
+                                                    <span class="badge bg-danger">Đã hủy</span>
+                                                    break;
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Low Stock Products -->
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-light text-center rounded p-4">
+                <div class="d-flex align-items-center justify-content-between mb-4">
+                    <h6 class="mb-0"><i class="fa fa-exclamation-triangle text-warning me-2"></i>Sản phẩm sắp hết hàng</h6>
+                    <a href="@Url.Action("Index", "Product")">Xem tất cả</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <thead>
+                            <tr class="text-dark">
+                                <th scope="col">Mã SP</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Tồn kho</th>
+                                <th scope="col">Trạng thái</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewBag.LowStockProducts != null)
+                            {
+                                foreach (var product in ViewBag.LowStockProducts)
+                                {
+                                    <tr>
+                                        <td>@product.Code</td>
+                                        <td>@product.Name</td>
+                                        <td>
+                                            @if (product.Quantity == 0)
+                                            {
+                                                <span class="badge bg-danger">Hết hàng</span>
+                                            }
+                                            else if (product.Quantity < 5)
+                                            {
+                                                <span class="badge bg-danger">@product.Quantity</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning">@product.Quantity</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (User.IsInRole("Admin"))
+                                            {
+                                                <a href="@Url.Action("Create", "ImportOrder")" class="btn btn-sm btn-primary">
+                                                    <i class="fa fa-plus"></i> Nhập kho
+                                                </a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-muted">Không có sản phẩm nào sắp hết hàng</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Recent Sales & Low Stock End -->
+
+<!-- Quick Actions Start -->
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        <div class="col-12">
+            <div class="bg-light rounded p-4">
+                <h6 class="mb-4"><i class="fa fa-bolt me-2"></i>Thao tác nhanh</h6>
+                <div class="d-flex flex-wrap gap-2">
+                    <a href="@Url.Action("Create", "Order")" class="btn btn-primary">
+                        <i class="fa fa-plus me-2"></i>Tạo đơn hàng mới
+                    </a>
+                    <a href="@Url.Action("Create", "Customer")" class="btn btn-success">
+                        <i class="fa fa-user-plus me-2"></i>Thêm khách hàng
+                    </a>
+                    <a href="@Url.Action("Index", "Product")" class="btn btn-info">
+                        <i class="fa fa-box me-2"></i>Xem sản phẩm
+                    </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="@Url.Action("Create", "ImportOrder")" class="btn btn-warning">
+                            <i class="fa fa-warehouse me-2"></i>Nhập kho
+                        </a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Quick Actions End -->

@@ -9,3 +9,4 @@ G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagemen
 G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\refint\SalesManagement.Service.dll
 G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.pdb
 G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\ref\SalesManagement.Service.dll
+G:\SalesManagementSystem\SalesManagement.Service\obj\Debug\net8.0\SalesManagement.Service.sourcelink.json
