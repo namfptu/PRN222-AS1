@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SalesManagement.Data;
+using SalesManagement.Data.Entities;
 using SalesManagement.WebApp.Models;
 using System.Security.Claims;
 
@@ -112,14 +114,75 @@ namespace SalesManagement.WebApp.Controllers
             }
 
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-            var account = _context.Accounts.Find(userId);
+            
+            // Include bảng Profile để lấy thông tin chi tiết
+            var account = _context.Accounts
+                .Include(a => a.Profile)
+                .FirstOrDefault(a => a.Id == userId);
 
             if (account == null)
             {
                 return NotFound();
             }
 
-            return View(account);
+            // Map Entity -> ViewModel
+            var model = new ProfileViewModel
+            {
+                Email = account.Email,
+                FullName = account.FullName,
+                Role = account.Role == 1 ? "Admin" : "Staff",
+                PhoneNumber = account.Profile?.PhoneNumber,
+                Address = account.Profile?.Address,
+                DateOfBirth = account.Profile?.DateOfBirth,
+                Avatar = account.Profile?.Avatar,
+                JoinDate = account.Profile?.JoinDate ?? DateTime.Now
+            };
+
+            return View(model);
+        }
+
+        // POST: /Auth/UpdateProfile
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult UpdateProfile(ProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Profile", model);
+            }
+
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var account = _context.Accounts
+                .Include(a => a.Profile)
+                .FirstOrDefault(a => a.Id == userId);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            // Update Account info
+            account.FullName = model.FullName;
+
+            // Update or Create Profile info
+            if (account.Profile == null)
+            {
+                account.Profile = new AccountProfile
+                {
+                    AccountId = userId,
+                    JoinDate = DateTime.Now
+                };
+            }
+
+            account.Profile.PhoneNumber = model.PhoneNumber;
+            account.Profile.Address = model.Address;
+            account.Profile.DateOfBirth = model.DateOfBirth;
+            // Avatar update logic later
+
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
+            return RedirectToAction("Profile");
         }
     }
 }

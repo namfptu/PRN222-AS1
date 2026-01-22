@@ -1,0 +1,107 @@
+@model SalesManagement.WebApp.Models.ProfileViewModel
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="col-12">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        }
+
+        <!-- Profile Card -->
+        <div class="col-sm-12 col-xl-4">
+            <div class="bg-light rounded h-100 p-4 text-center">
+                <div class="position-relative d-inline-block mb-4">
+                    <img class="rounded-circle border border-3 border-primary" 
+                         src="@(string.IsNullOrEmpty(Model.Avatar) ? "/dashmin/img/user.jpg" : Model.Avatar)" 
+                         alt="" style="width: 120px; height: 120px;">
+                    <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-2"></div>
+                </div>
+                <h5 class="mb-1">@Model.FullName</h5>
+                <p class="mb-1 text-muted">@Model.Email</p>
+                <div class="d-flex justify-content-center mb-2">
+                    <span class="badge bg-primary rounded-pill m-1">@Model.Role</span>
+                    <span class="badge bg-info rounded-pill m-1">Thành viên từ @Model.JoinDate.Year</span>
+                </div>
+                <hr>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary"><i class="fa fa-camera me-2"></i>Đổi ảnh đại diện</button>
+                    <button class="btn btn-outline-secondary"><i class="fa fa-key me-2"></i>Đổi mật khẩu</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <div class="col-sm-12 col-xl-8">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Cập nhật thông tin</h6>
+                <form asp-action="UpdateProfile" method="post">
+                    @Html.AntiForgeryToken()
+                    
+                    <div class="row mb-3">
+                        <label asp-for="FullName" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="FullName" class="form-control" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Email</label>
+                        <div class="col-sm-9">
+                            <input asp-for="Email" class="form-control" disabled readonly />
+                            <small class="text-muted">Không thể thay đổi email.</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label class="col-sm-3 col-form-label">Vai trò</label>
+                        <div class="col-sm-9">
+                            <input asp-for="Role" class="form-control" disabled readonly />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label asp-for="PhoneNumber" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="PhoneNumber" class="form-control" placeholder="Nhập số điện thoại..." />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label asp-for="DateOfBirth" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <input asp-for="DateOfBirth" class="form-control" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <label asp-for="Address" class="col-sm-3 col-form-label"></label>
+                        <div class="col-sm-9">
+                            <textarea asp-for="Address" class="form-control" rows="3" placeholder="Nhập địa chỉ..."></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-save me-2"></i>Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
