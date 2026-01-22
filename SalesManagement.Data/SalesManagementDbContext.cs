@@ -16,6 +16,7 @@ namespace SalesManagement.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<AccountProfile> AccountProfiles { get; set; }
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
@@ -133,6 +134,13 @@ namespace SalesManagement.Data
             modelBuilder.Entity<ImportOrder>()
                 .HasIndex(io => io.Code)
                 .IsUnique();
+
+            // Account -> AccountProfile (1-to-1 with Cascade Delete)
+            modelBuilder.Entity<Account>()
+                .HasOne(a => a.Profile)
+                .WithOne(p => p.Account)
+                .HasForeignKey<AccountProfile>(p => p.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Seed data has been moved to SeedData.cs
             // Call SeedData.InitializeAsync(context) in Program.cs

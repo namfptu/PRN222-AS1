@@ -10,7 +10,7 @@
             <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-chart-line fa-3x text-primary"></i>
                 <div class="ms-3">
-                    <p class="mb-2">Doanh thu hôm nay</p>
+                    <p class="mb-2">@if(User.IsInRole("Admin")) { <text>Doanh thu hôm nay</text> } else { <text>Doanh số hôm nay</text> }</p>
                     <h6 class="mb-0">@String.Format("{0:N0}", ViewBag.TodayRevenue) ₫</h6>
                 </div>
             </div>
@@ -19,7 +19,7 @@
             <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-chart-bar fa-3x text-primary"></i>
                 <div class="ms-3">
-                    <p class="mb-2">Tổng doanh thu</p>
+                    <p class="mb-2">@if(User.IsInRole("Admin")) { <text>Tổng doanh thu</text> } else { <text>Tổng doanh số</text> }</p>
                     <h6 class="mb-0">@String.Format("{0:N0}", ViewBag.TotalRevenue) ₫</h6>
                 </div>
             </div>
@@ -28,7 +28,7 @@
             <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-shopping-cart fa-3x text-primary"></i>
                 <div class="ms-3">
-                    <p class="mb-2">Đơn hàng hôm nay</p>
+                    <p class="mb-2">@if(User.IsInRole("Admin")) { <text>Đơn hàng hôm nay</text> } else { <text>Đơn hàng của bạn</text> }</p>
                     <h6 class="mb-0">@ViewBag.TodayOrders đơn</h6>
                 </div>
             </div>
@@ -62,7 +62,7 @@
             <div class="bg-info rounded d-flex align-items-center justify-content-between p-4">
                 <i class="fa fa-clipboard-list fa-3x text-white"></i>
                 <div class="ms-3 text-white">
-                    <p class="mb-2">Tổng đơn hàng</p>
+                    <p class="mb-2">@if(User.IsInRole("Admin")) { <text>Tổng đơn hàng</text> } else { <text>Đơn đã bán</text> }</p>
                     <h6 class="mb-0 text-white">@ViewBag.TotalOrders</h6>
                 </div>
             </div>
@@ -78,7 +78,10 @@
         <div class="col-sm-12 col-xl-6">
             <div class="bg-light text-center rounded p-4">
                 <div class="d-flex align-items-center justify-content-between mb-4">
-                    <h6 class="mb-0"><i class="fa fa-receipt me-2"></i>Đơn hàng gần đây</h6>
+                    <h6 class="mb-0">
+                        <i class="fa fa-receipt me-2"></i>
+                        @if(User.IsInRole("Admin")) { <text>Đơn hàng gần đây</text> } else { <text>Đơn hàng của tôi</text> }
+                    </h6>
                     <a href="@Url.Action("Index", "Order")">Xem tất cả</a>
                 </div>
                 <div class="table-responsive">

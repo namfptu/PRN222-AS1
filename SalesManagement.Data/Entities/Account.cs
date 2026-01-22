@@ -39,6 +39,11 @@ namespace SalesManagement.Data.Entities
         /// Collection of Import Orders created by this account
         /// </summary>
         public virtual ICollection<ImportOrder> CreatedImportOrders { get; set; } = new List<ImportOrder>();
+
+        /// <summary>
+        /// Extended profile information (1-to-1)
+        /// </summary>
+        public virtual AccountProfile? Profile { get; set; }
     }
 
     /// <summary>
