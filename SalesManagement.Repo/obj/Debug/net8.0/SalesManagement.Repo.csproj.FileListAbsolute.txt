@@ -8,9 +8,9 @@ G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.R
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.AssemblyInfoInputs.cache
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.AssemblyInfo.cs
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.csproj.CoreCompileInputs.cache
+G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.sourcelink.json
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesMan.9DA7A6D3.Up2Date
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.dll
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\refint\SalesManagement.Repo.dll
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.pdb
 G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\ref\SalesManagement.Repo.dll
-G:\SalesManagementSystem\SalesManagement.Repo\obj\Debug\net8.0\SalesManagement.Repo.sourcelink.json

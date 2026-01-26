@@ -9,7 +9,9 @@
       "SalesManagement.WebApp/1.0.0": {
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Design": "8.0.11",
-          "SalesManagement.Data": "1.0.0"
+          "SalesManagement.Data": "1.0.0",
+          "SalesManagement.Repo": "1.0.0",
+          "SalesManagement.Service": "1.0.0"
         },
         "runtime": {
           "SalesManagement.WebApp.dll": {}
@@ -903,6 +905,29 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "SalesManagement.Repo/1.0.0": {
+        "dependencies": {
+          "SalesManagement.Data": "1.0.0"
+        },
+        "runtime": {
+          "SalesManagement.Repo.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "SalesManagement.Service/1.0.0": {
+        "dependencies": {
+          "SalesManagement.Data": "1.0.0",
+          "SalesManagement.Repo": "1.0.0"
+        },
+        "runtime": {
+          "SalesManagement.Service.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -1438,6 +1463,16 @@
       "hashPath": "system.windows.extensions.6.0.0.nupkg.sha512"
     },
     "SalesManagement.Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SalesManagement.Repo/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "SalesManagement.Service/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

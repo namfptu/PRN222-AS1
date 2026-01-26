@@ -1496,6 +1496,33 @@
         "runtime": {
           "bin/placeholder/SalesManagement.Data.dll": {}
         }
+      },
+      "SalesManagement.Repo/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SalesManagement.Data": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/SalesManagement.Repo.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SalesManagement.Repo.dll": {}
+        }
+      },
+      "SalesManagement.Service/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SalesManagement.Data": "1.0.0",
+          "SalesManagement.Repo": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/SalesManagement.Service.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SalesManagement.Service.dll": {}
+        }
       }
     }
   },
@@ -3977,12 +4004,24 @@
       "type": "project",
       "path": "../SalesManagement.Data/SalesManagement.Data.csproj",
       "msbuildProject": "../SalesManagement.Data/SalesManagement.Data.csproj"
+    },
+    "SalesManagement.Repo/1.0.0": {
+      "type": "project",
+      "path": "../SalesManagement.Repo/SalesManagement.Repo.csproj",
+      "msbuildProject": "../SalesManagement.Repo/SalesManagement.Repo.csproj"
+    },
+    "SalesManagement.Service/1.0.0": {
+      "type": "project",
+      "path": "../SalesManagement.Service/SalesManagement.Service.csproj",
+      "msbuildProject": "../SalesManagement.Service/SalesManagement.Service.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "Microsoft.EntityFrameworkCore.Design >= 8.0.11",
-      "SalesManagement.Data >= 1.0.0"
+      "SalesManagement.Data >= 1.0.0",
+      "SalesManagement.Repo >= 1.0.0",
+      "SalesManagement.Service >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4019,6 +4058,12 @@
           "projectReferences": {
             "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj": {
               "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj"
+            },
+            "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj": {
+              "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj"
+            },
+            "G:\\SalesManagementSystem\\SalesManagement.Service\\SalesManagement.Service.csproj": {
+              "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Service\\SalesManagement.Service.csproj"
             }
           }
         }
