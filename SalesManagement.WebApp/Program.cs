@@ -32,6 +32,12 @@ namespace SalesManagement.WebApp
                     b => b.MigrationsAssembly("SalesManagement.Data")
                 ));
 
+            // Register Repositories
+            builder.Services.AddScoped<SalesManagement.Repo.Interfaces.IAccountRepository, SalesManagement.Repo.Implementations.AccountRepository>();
+
+            // Register Services
+            builder.Services.AddScoped<SalesManagement.Service.Interfaces.IAccountService, SalesManagement.Service.Implementations.AccountService>();
+
             var app = builder.Build();
 
             // Seed database with initial data
