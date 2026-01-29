@@ -3,7 +3,7 @@
 Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team phát triển hệ thống Sales Management. Phân chia dựa trên các Module chức năng để giảm thiểu xung đột code (Merge Conflict).
 
 ## 👥 Tổng Quan Team
-*   **Mô hình làm việc:** Chia theo chiều dọc (Vertical Splitting). Mỗi thành viên chịu trách nhiệm Full-stack (Database -> Controller -> View) cho module của mình.
+
 *   **Nguyên tắc chung:**
     *   Tự tạo Branch riêng khi dev (vd: `feature/product-management`).
     *   Sử dụng chung `_AdminLayout` và các Helper có sẵn.
