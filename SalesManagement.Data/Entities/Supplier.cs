@@ -29,7 +29,7 @@ namespace SalesManagement.Data.Entities
         /// Status: true = Active, false = Inactive
         /// </summary>
         public bool Status { get; set; } = true;
-
+         
         // Navigation property
         public virtual ICollection<ImportOrder> ImportOrders { get; set; } = new List<ImportOrder>();
     }
