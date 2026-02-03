@@ -1,88 +1,101 @@
-# Prompt for Gemini: ERD Chen's Notation Analysis
+# Prompt for Gemini: ERD Chen's Notation Analysis (Strict)
 
 ## Context
 
-Tôi cần vẽ **Entity-Relationship Diagram (ERD)** theo chuẩn **Chen's Notation** cho dự án Sales Management System.
-Tôi cần bạn phân tích các Entities trong file code và liệt kê chi tiết các thành phần để tôi vẽ.
+Tôi đang vẽ **ERD theo chuẩn Chen's Notation** cho dự án Sales Management System.
+Tôi cần bạn phân tích các Entities và Relationships dựa trên Code C# đã cung cấp, tuân thủ nghiêm ngặt các ký hiệu của Chen.
 
 ## Request
 
-Hãy đóng vai trò là **Data Architect** và phân tích cấu trúc dữ liệu sau đây để chuẩn bị vẽ ERD Chen's Notation:
+Hãy đóng vai trò là **Data Architect** và xuất ra bảng phân tích chi tiết để tôi vẽ.
 
-### 1. Entities & Attributes (Thực thể & Thuộc tính)
-Liệt kê từng Entity (hình chữ nhật) và các Attributes (hình oval) của nó.
-Đánh dấu rõ:
-*   **Key Attribute** (Khóa chính) - *Gạch chân*
-*   **Composite Attribute** (Thuộc tính phức hợp) - *(Nếu có)*
-*   **Derived Attribute** (Thuộc tính dẫn xuất) - *(Ví dụ: SubTotal = Price * Quantity, TotalAmount)*
-*   **Multivalued Attribute** (Thuộc tính đa trị) - *(Nếu có)*
+### 1. Phân loại Entity (Strong vs Weak)
+*   **Strong Entity (Thực thể mạnh):** Hình chữ nhật thường.
+*   **Weak Entity (Thực thể yếu):** Hình chữ nhật lồng (Double Rectangle).
+    *   *Gợi ý:* AccountProfile, OrderDetail, ImportOrderDetail.
 
-### 2. Relationships (Mối quan hệ)
-Liệt kê các Relationship (hình thoi) giữa các Entities.
-Với mỗi quan hệ, xác định:
-*   **Tên quan hệ** (Động từ, ví dụ: "Places", "Contains").
-*   **Cardinality Ratio** (Tỷ số lực lượng): 1:1, 1:N, M:N.
-*   **Participation Constraint** (Ràng buộc tham gia): Partial (Một phần) hay Total (Toàn bộ/Bắt buộc - 2 vạch).
+### 2. Quan hệ & Xác định (Identifying Relationships)
+*   Xác định rõ quan hệ nào là **Identifying Relationship** (Quan hệ xác định - dùng cho thực thể yếu).
+    *   Ký hiệu: Hình thoi lồng (Double Diamond).
+*   Xác định **Cardinality Ratio** (1:1, 1:N, M:N).
 
-## System Entities Input
+### 3. Ràng buộc tham gia (Participation Constraints)
+*   **Total Level (Tham gia toàn bộ):** Ký hiệu 2 nét (Double Line).
+    *   *Quy tắc:* Thực thể yếu LUÔN có Total Participation với chủ nhân của nó.
+*   **Partial Level (Tham gia một phần):** Ký hiệu 1 nét (Single Line).
 
-Dưới đây là cấu trúc các Class C# trong dự án:
+## System Data Structure
 
-1.  **Account** (User)
+Dưới đây là cấu trúc chính thức từ Code C#:
+
+### A. Core Entities
+1.  **Account** (Strong)
     *   PK: `Id`
-    *   Attrs: `Email`, `Password`, `FullName`, `Role`, `IsActive`
-2.  **AccountProfile** (Weak Entity?)
+    *   Attrs: `Email`, `Password`, `FullName`, `Role`
+2.  **Category** (Strong)
     *   PK: `Id`
-    *   Attrs: `PhoneNumber`, `Address`, `Avatar`, `JoinDate`, `AccountId` (FK)
-3.  **Category**
+    *   Attrs: `Name`
+3.  **Product** (Strong)
     *   PK: `Id`
-    *   Attrs: `Name`, `Description`, `Status`
-4.  **Product**
+    *   Attrs: `Name`, `Price`, `Quantity`
+    *   FK: `CategoryId`
+4.  **Customer** (Strong)
     *   PK: `Id`
-    *   Attrs: `Name`, `Code`, `Price`, `Quantity`, `ImageUrl`, `Description`, `Status`, `CategoryId` (FK)
-5.  **Customer**
+    *   Attrs: `Phone`, `Name`
+5.  **Supplier** (Strong)
     *   PK: `Id`
-    *   Attrs: `FullName`, `Phone`, `Email`, `Address`, `Status`
-6.  **Supplier**
+    *   Attrs: `CompanyName`, `Address`
+
+### B. Transactional Entities
+6.  **Order** (Strong)
     *   PK: `Id`
-    *   Attrs: `CompanyName`, `ContactPhone`, `Email`, `Address`, `Status`
-7.  **Order**
+    *   Attrs: `Code`, `TotalAmount`, `CreatedDate`
+    *   FKs: `CreatedBy` (Account), `CustomerId` (Customer - Nullable)
+7.  **ImportOrder** (Strong)
     *   PK: `Id`
-    *   Attrs: `Code`, `CreatedDate`, `TotalAmount` (Derived?), `Status`, `Note`
-    *   FKs: `CustomerId`, `CreatedBy` (Account)
-8.  **OrderDetail** (Associative Entity / Relationship Attribute?)
-    *   Keys: `OrderId`, `ProductId`
-    *   Attrs: `UnitPrice`, `Quantity`, `SubTotal` (Derived)
-9.  **ImportOrder**
-    *   PK: `Id`
-    *   Attrs: `Code`, `ImportDate`, `TotalCost`, `Status`
-    *   FKs: `SupplierId`, `CreatedBy` (Account)
-10. **ImportOrderDetail**
-    *   Keys: `ImportOrderId`, `ProductId`
-    *   Attrs: `UnitCost`, `Quantity`, `SubTotal` (Derived)
+    *   Attrs: `Code`, `TotalCost`
+    *   FKs: `CreatedBy` (Account), `SupplierId` (Supplier)
+
+### C. Weak Entities (Cần vẽ Double Rectangle)
+8.  **AccountProfile** (Weak)
+    *   Owner: `Account`
+    *   PK: `AccountId` (Vừa là PK vừa là FK)
+    *   Attrs: `Address`, `Avatar`
+9.  **OrderDetail** (Weak / Associate)
+    *   Owners: `Order` & `Product`
+    *   PK: `(OrderId, ProductId)`
+    *   Attrs: `Quantity`, `UnitPrice`, `SubTotal` (Derived)
+10. **ImportOrderDetail** (Weak / Associate)
+    *   Owners: `ImportOrder` & `Product`
+    *   PK: `(ImportOrderId, ProductId)`
+    *   Attrs: `Quantity`, `UnitCost`
 
 ## Output Format Requirements
 
-Hãy trình bày kết quả phân tích theo format sau để tôi dễ vẽ:
+Hãy điền vào bảng sau:
 
-### A. Danh sách Thực thể (Entities)
-*   **Customer**:
-    *   Attributes: <u>Id</u>, FullName, Phone, Email...
-*   **Order**:
-    *   Attributes: <u>Id</u>, Code, CreatedDate...
-    *   Derived: TotalAmount (tính từ OrderDetails)
+### Bảng 1: Danh sách Quan hệ (Relationships Table)
 
-### B. Danh sách Quan hệ (Relationships)
+| Entity 1 (Chủ/Mạnh) | Quan hệ (Verb) | Loại Hình Thoi | Entity 2 (Phụ/Yếu) | Cardinality | Participation (E1 : E2) | Ghi chú Vẽ |
+| :--- | :---: | :---: | :--- | :---: | :---: | :--- |
+| **Nhóm 1: Quản trị** | | | | | |
+| Account | Has | **Double** | AccountProfile | 1 : 1 | Partial : **Total** | Profile yếu, phụ thuộc hoàn toàn Account. |
+| Account | Manages | Single | Order | 1 : N | Partial : **Total** | Một Order bắt buộc phải có người tạo. |
+| Account | Processes | Single | ImportOrder | 1 : N | Partial : **Total** | Một phiếu nhập bắt buộc phải có người tạo. |
+| **Nhóm 2: Sản phẩm** | | | | | |
+| Category | Categorizes | Single | Product | 1 : N | Partial : **Total** | Sản phẩm bắt buộc thuộc danh mục. |
+| **Nhóm 3: Bán hàng** | | | | | |
+| Customer | Places | Single | Order | 1 : N | Partial : Partial | Order có thể là khách vãng lai (CustomerId null). |
+| Order | Contains | **Double** | OrderDetail | 1 : N | Partial : **Total** | OrderDetail là thực thể yếu của Order. |
+| Product | Included in | **Double** | OrderDetail | 1 : N | Partial : **Total** | OrderDetail xác định bởi cả Product. |
+| **Nhóm 4: Nhập kho** | | | | | |
+| Supplier | Supplies | Single | ImportOrder | 1 : N | Partial : **Total** | Phiếu nhập bắt buộc từ NCC. |
+| ImportOrder | Has Items | **Double** | ImportOrderDetail | 1 : N | Partial : **Total** | Chi tiết nhập phụ thuộc phiếu nhập. |
+| Product | Restocked in | **Double** | ImportOrderDetail | 1 : N | Partial : **Total** | Chi tiết nhập xác định bởi cả Product. |
 
-| Entity 1 | Relationship (Verb) | Entity 2 | Cardinality | Participation (E1 : E2) | Ghi chú |
-| :--- | :---: | :--- | :---: | :--- | :--- |
-| Customer | **Places** (Đặt hàng) | Order | 1 : N | Total : Total | Một khách có thể đặt nhiều đơn. Đơn phải thuộc về 1 khách (nếu khách vãng lai thì sao?). |
-| Account | **Manages** | Order | 1 : N | Partial : Total | Staff tạo đơn. |
-| Order | **Contains** | Product | M : N | Total : Total | Quan hệ nhiều-nhiều này có thuộc tính riêng (Quantity, Price) -> Chuyển thành Associative Entity hoặc Relationship Attribute. |
-
-### C. Lưu ý đặc biệt cho Chen's Notation
-*   Với quan hệ M:N giữa Order và Product, hãy hướng dẫn tôi cách vẽ **OrderDetail** trong Chen's (dùng hình thoi hay hình chữ nhật lồng?).
-*   Xác định rõ các thuộc tính dẫn xuất (nét đứt).
+### B. Danh sách Thuộc tính (Attributes Highlight)
+*   Liệt kê các thuộc tính **Derived** (Nét đứt): Ví dụ `SubTotal`, `TotalAmount`?
+*   Liệt kê các thuộc tính **Multivalued** (Nét đôi): (Nếu có).
 
 ## Tone
-Chuyên nghiệp, phân tích sâu về cơ sở dữ liệu.
+Chính xác tuyệt đối về ký hiệu Chen.
