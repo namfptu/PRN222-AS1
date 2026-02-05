@@ -1,6 +1,6 @@
 # Bảng Phân Quyền (Permission Matrix)
 
-Dưới đây là bảng phân quyền chi tiết cho hệ thống Sales Management:
+Dưới đây là bảng phân quyền chi tiết cho hệ thống Sales Management:....
 
 | **Module** | **Chức năng** | **Admin** | **Staff** | **Ghi chú** |
 | :--- | :--- | :---: | :---: | :--- |
