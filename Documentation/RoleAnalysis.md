@@ -1,37 +1,46 @@
 # Bảng Phân Quyền (Permission Matrix)
 
-Dưới đây là bảng phân quyền chi tiết cho hệ thống Sales Management:
+Dưới đây là bảng phân quyền chi tiết cho hệ thống Sales Management với 4 vai trò chuyên biệt:
 
-| **Module** | **Chức năng** | **Admin** | **Staff** | **Ghi chú** |
-| :--- | :--- | :---: | :---: | :--- |
-| **Authentication** | Login / Logout | ✅ | ✅ | |
-| **Dashboard** | Xem thống kê | ✅ (Full) | ✅ (Limited) | Admin xem doanh thu/lợi nhuận. Staff xem đơn hàng cá nhân/doanh số bán. |
-| **Account** | Quản lý tài khoản | ✅ | ❌ | Chỉ Admin tạo/khóa tài khoản nhân viên. |
-| **Category** | Quản lý Danh mục | ✅ | 👁️ (View Only) | Staff chỉ xem để biết phân loại, không được sửa cấu trúc. |
-| **Product** | Quản lý Sản phẩm | ✅ | 👁️ (View Only) | Staff xem giá/tồn kho để tư vấn. **Không được sửa giá**. |
-| **Customer** | Quản lý Khách hàng | ✅ | ✅ | Staff cần thêm khách mới khi bán hàng. |
-| **Order** | Tạo đơn hàng (POS) | ✅ | ✅ | Chức năng chính của Sales. |
-| | Xem danh sách đơn | ✅ (All) | ✅ (Mine/All) | Staff có thể xem lịch sử đơn hàng. |
-| | Hủy / Xóa đơn | ✅ | ⚠️ (Restricted) | Staff chỉ hủy được đơn "Chờ xử lý". Đơn đã chốt phải gọi Admin. |
-| **Supplier** | Nhà cung cấp | ✅ | ❌ | Thông tin đối tác nhập hàng là bảo mật kinh doanh. |
-| **ImportOrder** | Nhập kho | ✅ | ❌ | Chỉ Admin/Thủ kho được phép nhập hàng và chỉnh giá vốn. |
+| **Module** | **Chức năng** | **Admin** | **ProductManager** | **Sales** | **Warehouse** | **Ghi chú** |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| **Authentication** | Login / Logout | ✅ | ✅ | ✅ | ✅ | |
+| **Dashboard** | Xem thống kê | ✅ (Full) | ❌ | ✅ (Sales) | ❌ | Admin xem toàn bộ, Sales xem doanh số cá nhân. |
+| **Account** | Quản lý tài khoản | ✅ | ❌ | ❌ | ❌ | Chỉ Admin quản lý user hệ thống. |
+| **Category** | Quản lý Danh mục | ✅ | ✅ | 👁️ (View) | 👁️ (View) | ProductManager chịu trách nhiệm cấu trúc sản phẩm. |
+| **Product** | Quản lý Sản phẩm | ✅ | ✅ | 👁️ (View) | 👁️ (View) | Sales/Warehouse cần xem để bán/nhập, không sửa. |
+| **Customer** | Quản lý Khách hàng | ✅ | ❌ | ✅ | ❌ | Sales chịu trách nhiệm CRM. |
+| **Order** | Tạo đơn hàng (POS) | ✅ | ❌ | ✅ | ❌ | Chức năng chính của Sales. |
+| | Xem danh sách đơn | ✅ | ❌ | ✅ | ❌ | |
+| | Hủy / Xóa đơn | ✅ | ❌ | ⚠️ (Pending) | ❌ | Sales chỉ hủy đơn chưa duyệt. |
+| **Supplier** | Nhà cung cấp | ✅ | ❌ | ❌ | ✅ | Warehouse quản lý đối tác nguồn hàng. |
+| **ImportOrder** | Nhập kho | ✅ | ❌ | ❌ | ✅ | Warehouse chịu trách nhiệm nhập hàng và giá vốn. |
 
 ## Chú thích:
-- ✅ **Full Access:** Xem, Thêm, Sửa, Xóa (nếu có).
-- 👁️ **View Only:** Chỉ được xem danh sách và chi tiết. Không có nút Thêm/Sửa/Xóa.
-- ❌ **No Access:** Không nhìn thấy trên Menu, truy cập trực tiếp URL sẽ báo lỗi (Access Denied).
-- ⚠️ **Restricted:** Có quyền nhưng bị giới hạn điều kiện (ví dụ: chỉ sửa được đơn của mình tạo, hoặc chỉ hủy đơn chưa duyệt).
+- ✅ **Full Access:** Xem, Thêm, Sửa, Xóa.
+- 👁️ **View Only:** Chỉ được xem danh sách và chi tiết.
+- ❌ **No Access:** Không có quyền truy cập.
+- ⚠️ **Restricted:** Có quyền nhưng bị giới hạn điều kiện.
 
 ---
 
 ## Phân tích Role
 
-### 1. Admin
-- **Vai trò:** Quản lý hệ thống, quản lý rủi ro (hủy đơn, tài khoản) và quản lý kho/tiền (nhập hàng, nhà cung cấp).
-- **Workload:** Tập trung vào các tác vụ quan trọng nhưng tần suất thấp hơn (Nhập kho, Quản lý user). Các tác vụ nhập liệu hàng ngày (Tạo đơn, thêm khách) đã được chia sẻ cho Staff.
+### 1. Admin (Quản trị viên)
+- **Trách nhiệm:** Quản lý User, cấu hình hệ thống và can thiệp khi có sự cố (Hủy đơn đã chốt, Sửa dữ liệu sai).
+- **Scope:** Toàn quyền.
 
-### 2. Staff
-- **Vai trò:** Bán hàng trực tiếp (Sales).
-- **Quyền hạn:** 
-    - Tập trung vào **Order** (Tạo đơn) và **Customer** (Quản lý khách).
-    - Các thông tin khác (Sản phẩm, Danh mục) chỉ được phép xem để tư vấn, không được sửa đổi để tránh sai lệch kho/giá.
+### 2. ProductManager (Quản lý sản phẩm)
+- **Trách nhiệm:** Xây dựng và duy trì danh mục sản phẩm chuẩn hóa.
+- **Scope:** Category, Product.
+- **Mục tiêu:** Đảm bảo thông tin sản phẩm (Giá, Ảnh, Mô tả) luôn chính xác để Sales bán hàng.
+
+### 3. Sales (Nhân viên kinh doanh)
+- **Trách nhiệm:** Tìm kiếm khách hàng, tạo đơn hàng và theo dõi doanh số.
+- **Scope:** Customer, Order.
+- **Mục tiêu:** Tối đa hóa doanh thu, chăm sóc khách hàng.
+
+### 4. Warehouse (Thủ kho)
+- **Trách nhiệm:** Quản lý nguồn hàng đầu vào, làm việc với nhà cung cấp.
+- **Scope:** Supplier, ImportOrder.
+- **Mục tiêu:** Đảm bảo hàng hóa đủ tồn kho, kiểm soát giá vốn nhập vào.
