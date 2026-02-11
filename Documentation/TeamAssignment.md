@@ -13,7 +13,7 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
 
 ## 📅 Chi Tiết Phân Công
 
-### 👤 Thành viên 1 (Team Leader / Core System)
+### 👤 Thành viên 1 (Admin / Team Leader)
 **Trách nhiệm:** Dựng khung dự án, quản lý người dùng và báo cáo tổng quan.
 *   **Màn hình & Chức năng:**
     1.  **Authentication:**
@@ -23,13 +23,13 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
     2.  **Account Management (Admin Only):**
         *   Danh sách tài khoản (CRUD).
         *   Reset mật khẩu cho nhân viên.
-        *   Phân quyền (Role: Admin/Staff).
+        *   Phân quyền (Role: Admin, ProductManager, Sales, Warehouse).
     3.  **Dashboard (Admin Only):**
         *   Thống kê doanh thu (Ngày/Tháng).
         *   Biểu đồ tăng trưởng.
         *   Tổng hợp số liệu (Sản phẩm, Đơn hàng...).
 
-### 👤 Thành viên 2 (Product Master)
+### 👤 Thành viên 2 (ProductManager)
 **Trách nhiệm:** Quản lý dữ liệu nền tảng (Sản phẩm) - Xương sống của hệ thống.
 *   **Màn hình & Chức năng:**
     1.  **Category (Danh mục):**
@@ -38,11 +38,11 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
         *   CRUD Sản phẩm (Tên, Giá, Ảnh, Mô tả...).
         *   Upload ảnh sản phẩm.
         *   Kiểm tra logic (Không xóa sản phẩm đã có đơn hàng -> Chuyển trạng thái ngưng bán).
-    3.  **Giao diện Staff:**
-        *   Làm màn hình `Index` (Danh sách) riêng cho Staff (chỉ xem, ẩn nút sửa/xóa).
+    3.  **Giao diện Read-Only:**
+        *   Làm màn hình `Index` (Danh sách) riêng cho Sales/Warehouse (chỉ xem, ẩn nút sửa/xóa).
 
-### 👤 Thành viên 3 (Sales Specialist)
-**Trách nhiệm:** Quy trình bán hàng đầu ra (Output) - Quan trọng nhất cho Staff.
+### 👤 Thành viên 3 (Sales)
+**Trách nhiệm:** Quy trình bán hàng đầu ra (Output) - Quan trọng nhất cho Sales Staff.
 *   **Màn hình & Chức năng:**
     1.  **Customer (Khách hàng):**
         *   CRUD Khách hàng.
@@ -53,9 +53,9 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
         *   Xem chi tiết đơn hàng (In hóa đơn - View).
     3.  **Xử lý đơn:**
         *   Cập nhật trạng thái (Đang giao -> Hoàn thành / Hủy).
-        *   Logic phân quyền Hủy đơn (Staff chỉ hủy Pending).
+        *   Logic phân quyền Hủy đơn (Sales chỉ hủy Pending).
 
-### 👤 Thành viên 4 (Warehouse Manager)
+### 👤 Thành viên 4 (Warehouse)
 **Trách nhiệm:** Quy trình nhập hàng đầu vào (Input) và Đối tác.
 *   **Màn hình & Chức năng:**
     1.  **Supplier (Nhà cung cấp):**

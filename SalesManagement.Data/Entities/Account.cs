@@ -52,6 +52,8 @@ namespace SalesManagement.Data.Entities
     public enum AccountRole
     {
         Admin = 1,
-        Staff = 2
+        Sales = 2,
+        ProductManager = 3,
+        Warehouse = 4
     }
 }
