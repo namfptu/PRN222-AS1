@@ -24,10 +24,10 @@ namespace SalesManagement.Data.Entities
         public string FullName { get; set; } = string.Empty;
 
         /// <summary>
-        /// Role: 1 = Admin, 2 = Staff
+        /// Role: 1 = Admin, 2 = Sales, 3 = ProductManager, 4 = Warehouse
         /// </summary>
         [Required]
-        public int Role { get; set; } = 2;
+        public int Role { get; set; }
 
         /// <summary>
         /// IsActive: true = Active, false = Inactive

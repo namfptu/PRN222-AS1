@@ -108,7 +108,7 @@ namespace SalesManagement.Data
             // ImportOrderDetail -> Product (Restrict Delete)
             modelBuilder.Entity<ImportOrderDetail>()
                 .HasOne(iod => iod.Product)
-                .WithMany()
+                .WithMany(p => p.ImportOrderDetails) 
                 .HasForeignKey(iod => iod.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -10,5 +10,6 @@ namespace SalesManagement.Service.Interfaces
         Task UpdateAccountAsync(Account account);
         Task DeleteAccountAsync(int id);
         Task<bool> EmailExistsAsync(string email);
+        Task ChangePasswordAsync(int userId, string newPassword);
     }
 }

@@ -67,7 +67,7 @@ namespace SalesManagement.WebApp.Controllers
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
                 new Claim(ClaimTypes.Name, account.FullName),
                 new Claim(ClaimTypes.Email, account.Email),
-                new Claim(ClaimTypes.Role, account.Role == 1 ? "Admin" : "Staff")
+                new Claim(ClaimTypes.Role, ((AccountRole)account.Role).ToString())
             };
 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -130,7 +130,7 @@ namespace SalesManagement.WebApp.Controllers
             {
                 Email = account.Email,
                 FullName = account.FullName,
-                Role = account.Role == 1 ? "Admin" : "Staff",
+                Role = ((AccountRole)account.Role).ToString(),
                 PhoneNumber = account.Profile?.PhoneNumber,
                 Address = account.Profile?.Address,
                 DateOfBirth = account.Profile?.DateOfBirth,

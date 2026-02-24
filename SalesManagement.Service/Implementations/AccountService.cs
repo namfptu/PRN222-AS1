@@ -52,5 +52,17 @@ namespace SalesManagement.Service.Implementations
         {
             return await _accountRepository.EmailExistsAsync(email);
         }
+
+        public async Task ChangePasswordAsync(int userId, string newPassword)
+        {
+            var account = await _accountRepository.GetByIdAsync(userId);
+            if (account != null)
+            {
+                // In production, remember to Hash the password here!
+                account.Password = newPassword; 
+                _accountRepository.Update(account);
+                await _accountRepository.SaveChangesAsync();
+            }
+        }
     }
 }

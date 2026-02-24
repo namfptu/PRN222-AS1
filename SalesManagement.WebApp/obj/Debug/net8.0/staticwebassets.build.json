@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "OAUQdHzWV4Lsu1GEvuW3g7o6BV9ISm/+IKnrIEQBnBk=",
+  "Hash": "U3L6JixcCQr5c2KUQDYZwsf0AuHgTEUhPJ2RXuU8jtc=",
   "Source": "SalesManagement.WebApp",
   "BasePath": "_content/SalesManagement.WebApp",
   "Mode": "Default",
@@ -9147,7 +9147,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 26 Jan 2026 09:53:45 GMT"
+          "Value": "Wed, 11 Feb 2026 15:03:47 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -9192,7 +9192,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 26 Jan 2026 09:53:45 GMT"
+          "Value": "Wed, 11 Feb 2026 15:03:47 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -9237,7 +9237,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 26 Jan 2026 09:53:45 GMT"
+          "Value": "Wed, 11 Feb 2026 15:03:47 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -9274,7 +9274,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Mon, 26 Jan 2026 09:53:45 GMT"
+          "Value": "Wed, 11 Feb 2026 15:03:47 GMT"
         },
         {
           "Name": "Cache-Control",

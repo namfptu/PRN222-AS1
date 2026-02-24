@@ -7,14 +7,14 @@ Dưới đây là bảng phân quyền chi tiết cho hệ thống Sales Managem
 | **Authentication** | Login / Logout | ✅ | ✅ | ✅ | ✅ | |
 | **Dashboard** | Xem thống kê | ✅ (Full) | ❌ | ✅ (Sales) | ❌ | Admin xem toàn bộ, Sales xem doanh số cá nhân. |
 | **Account** | Quản lý tài khoản | ✅ | ❌ | ❌ | ❌ | Chỉ Admin quản lý user hệ thống. |
-| **Category** | Quản lý Danh mục | ✅ | ✅ | 👁️ (View) | 👁️ (View) | ProductManager chịu trách nhiệm cấu trúc sản phẩm. |
-| **Product** | Quản lý Sản phẩm | ✅ | ✅ | 👁️ (View) | 👁️ (View) | Sales/Warehouse cần xem để bán/nhập, không sửa. |
-| **Customer** | Quản lý Khách hàng | ✅ | ❌ | ✅ | ❌ | Sales chịu trách nhiệm CRM. |
-| **Order** | Tạo đơn hàng (POS) | ✅ | ❌ | ✅ | ❌ | Chức năng chính của Sales. |
-| | Xem danh sách đơn | ✅ | ❌ | ✅ | ❌ | |
-| | Hủy / Xóa đơn | ✅ | ❌ | ⚠️ (Pending) | ❌ | Sales chỉ hủy đơn chưa duyệt. |
-| **Supplier** | Nhà cung cấp | ✅ | ❌ | ❌ | ✅ | Warehouse quản lý đối tác nguồn hàng. |
-| **ImportOrder** | Nhập kho | ✅ | ❌ | ❌ | ✅ | Warehouse chịu trách nhiệm nhập hàng và giá vốn. |
+| **Category** | Quản lý Danh mục | 👁️ (View) | ✅ | 👁️ (View) | 👁️ (View) | Admin chỉ giám sát, ProductManager chịu trách nhiệm. |
+| **Product** | Quản lý Sản phẩm | 👁️ (View) | ✅ | 👁️ (View) | 👁️ (View) | Admin chỉ giám sát. |
+| **Customer** | Quản lý Khách hàng | 👁️ (View) | ❌ | ✅ | ❌ | Admin chỉ giám sát. |
+| **Order** | Tạo đơn hàng (POS) | ❌ | ❌ | ✅ | ❌ | Chỉ Sales được tạo đơn. |
+| | Xem danh sách đơn | ✅ | ❌ | ✅ | ❌ | Admin xem được toàn bộ đơn để báo cáo. |
+| | Hủy / Xóa đơn | ✅ | ❌ | ⚠️ (Pending) | ❌ | Admin có quyền can thiệp hủy đơn sai sót. |
+| **Supplier** | Nhà cung cấp | 👁️ (View) | ❌ | ❌ | ✅ | Admin chỉ giám sát. |
+| **ImportOrder** | Nhập kho | 👁️ (View) | ❌ | ❌ | ✅ | Admin chỉ giám sát. |
 
 ## Chú thích:
 - ✅ **Full Access:** Xem, Thêm, Sửa, Xóa.

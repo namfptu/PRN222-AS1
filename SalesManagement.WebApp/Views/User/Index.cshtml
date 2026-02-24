@@ -37,7 +37,7 @@
                                 }
                                 else
                                 {
-                                    <span class="badge bg-primary">Staff</span>
+                                    <span class="badge bg-primary">@user.RoleName</span>
                                 }
                             </td>
                             <td>
@@ -52,6 +52,7 @@
                             </td>
                             <td>
                                 <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-warning">Edit</a>
+                                <a asp-action="ResetPassword" asp-route-id="@user.Id" class="btn btn-sm btn-info">Reset Pass</a>
                                 <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-sm btn-danger">Delete</a>
                             </td>
                         </tr>

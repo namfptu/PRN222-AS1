@@ -26,7 +26,7 @@ namespace SalesManagement.WebApp.Models
         public string FullName { get; set; }
 
         [Required]
-        public int RoleId { get; set; } // 1=Admin, 2=Staff
+        public int RoleId { get; set; } // 1=Admin, 2=Sales, 3=ProductManager, 4=Warehouse
     }
 
     public class EditUserViewModel
@@ -44,5 +44,21 @@ namespace SalesManagement.WebApp.Models
         public int RoleId { get; set; }
         
         public bool IsActive { get; set; }
+    }
+
+    public class ResetPasswordViewModel
+    {
+        public int Id { get; set; }
+        public string Email { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("NewPassword", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
     }
 }
