@@ -12,8 +12,8 @@ using SalesManagement.Data;
 namespace SalesManagement.Data.Migrations
 {
     [DbContext(typeof(SalesManagementDbContext))]
-    [Migration("20260122034616_AddAccountProfile")]
-    partial class AddAccountProfile
+    [Migration("20260211145616_InitialSystemSetup")]
+    partial class InitialSystemSetup
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -431,7 +431,7 @@ namespace SalesManagement.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("SalesManagement.Data.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ImportOrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -518,6 +518,8 @@ namespace SalesManagement.Data.Migrations
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Product", b =>
                 {
+                    b.Navigation("ImportOrderDetails");
+
                     b.Navigation("OrderDetails");
                 });
 

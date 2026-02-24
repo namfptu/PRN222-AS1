@@ -428,7 +428,7 @@ namespace SalesManagement.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("SalesManagement.Data.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ImportOrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -515,6 +515,8 @@ namespace SalesManagement.Data.Migrations
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Product", b =>
                 {
+                    b.Navigation("ImportOrderDetails");
+
                     b.Navigation("OrderDetails");
                 });
 

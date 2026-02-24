@@ -146,5 +146,39 @@ namespace SalesManagement.WebApp.Controllers
             await _accountService.DeleteAccountAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> ResetPassword(int id)
+        {
+            var account = await _accountService.GetAccountByIdAsync(id);
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            var model = new ResetPasswordViewModel
+            {
+                Id = account.Id,
+                Email = account.Email
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(int id, ResetPasswordViewModel model)
+        {
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _accountService.ChangePasswordAsync(id, model.NewPassword);
+                TempData["SuccessMessage"] = "Password reset successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
     }
 }

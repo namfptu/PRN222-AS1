@@ -60,18 +60,26 @@ namespace SalesManagement.Data
                 },
                 new Account
                 {
-                    Email = "staff@electronics.com",
-                    Password = "staff123",
-                    FullName = "Staff Demo",
-                    Role = (int)AccountRole.Staff,
+                    Email = "sales@electronics.com",
+                    Password = "sales123",
+                    FullName = "Sales Newbie",
+                    Role = (int)AccountRole.Sales,
                     IsActive = true
                 },
                 new Account
                 {
-                    Email = "manager@electronics.com",
-                    Password = "manager123",
-                    FullName = "Store Manager",
-                    Role = (int)AccountRole.Admin,
+                    Email = "product@electronics.com",
+                    Password = "product123",
+                    FullName = "Product Manager",
+                    Role = (int)AccountRole.ProductManager,
+                    IsActive = true
+                },
+                new Account
+                {
+                    Email = "warehouse@electronics.com",
+                    Password = "warehouse123",
+                    FullName = "Warehouse Keeper",
+                    Role = (int)AccountRole.Warehouse,
                     IsActive = true
                 }
             };
