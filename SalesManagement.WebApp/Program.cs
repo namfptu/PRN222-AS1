@@ -77,7 +77,7 @@ namespace SalesManagement.WebApp
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            //await app.RunAsync();
+            await app.RunAsync();
         }
     }
 }

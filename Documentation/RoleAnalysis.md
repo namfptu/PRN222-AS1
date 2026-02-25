@@ -11,8 +11,8 @@ Dưới đây là bảng phân quyền chi tiết cho hệ thống Sales Managem
 | **Product** | Quản lý Sản phẩm | 👁️ (View) | ✅ | 👁️ (View) | 👁️ (View) | Admin chỉ giám sát. |
 | **Customer** | Quản lý Khách hàng | 👁️ (View) | ❌ | ✅ | ❌ | Admin chỉ giám sát. |
 | **Order** | Tạo đơn hàng (POS) | ❌ | ❌ | ✅ | ❌ | Chỉ Sales được tạo đơn. |
-| | Xem danh sách đơn | ✅ | ❌ | ✅ | ❌ | Admin xem được toàn bộ đơn để báo cáo. |
-| | Hủy / Xóa đơn | ✅ | ❌ | ⚠️ (Pending) | ❌ | Admin có quyền can thiệp hủy đơn sai sót. |
+| | Xem danh sách đơn | 👁️ (View) | ❌ | ✅ | ❌ | Admin xem được toàn bộ đơn để báo cáo. |
+| | Hủy / Xóa đơn | 👁️ (View) | ❌ | ⚠️ (Pending) | ❌ | Admin có quyền can thiệp hủy đơn sai sót. |
 | **Supplier** | Nhà cung cấp | 👁️ (View) | ❌ | ❌ | ✅ | Admin chỉ giám sát. |
 | **ImportOrder** | Nhập kho | 👁️ (View) | ❌ | ❌ | ✅ | Admin chỉ giám sát. |
 

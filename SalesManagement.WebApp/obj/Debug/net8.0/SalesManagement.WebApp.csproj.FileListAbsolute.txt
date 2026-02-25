@@ -304,3 +304,4 @@ E:\VSCODE\Project_PRN222\PRN222-AS1\SalesManagement.WebApp\obj\Debug\net8.0\refi
 E:\VSCODE\Project_PRN222\PRN222-AS1\SalesManagement.WebApp\obj\Debug\net8.0\SalesManagement.WebApp.pdb
 E:\VSCODE\Project_PRN222\PRN222-AS1\SalesManagement.WebApp\obj\Debug\net8.0\SalesManagement.WebApp.genruntimeconfig.cache
 E:\VSCODE\Project_PRN222\PRN222-AS1\SalesManagement.WebApp\obj\Debug\net8.0\ref\SalesManagement.WebApp.dll
+E:\VSCODE\Project_PRN222\PRN222-AS1\SalesManagement.WebApp\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
