@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using SalesManagement.Data;
+using SalesManagement.Service.Implementations;
+using SalesManagement.Service.Interfaces;
 
 namespace SalesManagement.WebApp
 {
@@ -34,10 +36,10 @@ namespace SalesManagement.WebApp
 
             // Register Repositories
             builder.Services.AddScoped<SalesManagement.Repo.Interfaces.IAccountRepository, SalesManagement.Repo.Implementations.AccountRepository>();
-
+            builder.Services.AddScoped(typeof(SalesManagement.Repo.Interfaces.IGenericRepository<>), typeof(SalesManagement.Repo.Implementations.GenericRepository<>)); // BỔ SUNG đăng ký GenericRepository
             // Register Services
             builder.Services.AddScoped<SalesManagement.Service.Interfaces.IAccountService, SalesManagement.Service.Implementations.AccountService>();
-
+            builder.Services.AddScoped<ISupplierService, SupplierService>();
             var app = builder.Build();
 
             // Seed database with initial data
