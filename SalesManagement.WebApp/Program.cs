@@ -40,6 +40,9 @@ namespace SalesManagement.WebApp
             // Register Services
             builder.Services.AddScoped<SalesManagement.Service.Interfaces.IAccountService, SalesManagement.Service.Implementations.AccountService>();
             builder.Services.AddScoped<ISupplierService, SupplierService>();
+            builder.Services.AddScoped<IImportOrderService, ImportOrderService>();
+            builder.Services.AddScoped<IReportService, ReportService>();
+
             var app = builder.Build();
 
             // Seed database with initial data

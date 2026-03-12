@@ -16,8 +16,8 @@ namespace SalesManagement.WebApp.Controllers
         // GET: Hiển thị danh sách nhà cung cấp
         public async Task<IActionResult> Index()
         {
-            var suppliers = await _supplierService.GetAllSuppliersAsync();
-            return View(suppliers);
+            var activeSuppliers = await _supplierService.GetActiveSuppliersAsync();
+            return View(activeSuppliers);
         }
 
         // GET: Hiển thị form thêm mới
@@ -38,6 +38,52 @@ namespace SalesManagement.WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(supplier);
+        }
+
+        // GET: Hiển thị form cập nhật thông tin
+        public async Task<IActionResult> Edit(int id)
+        {
+            var supplier = await _supplierService.GetSupplierByIdAsync(id);
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+            return View(supplier);
+        }
+
+        // POST: Xử lý lưu thông tin sau khi cập nhật
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, Supplier supplier)
+        {
+            if (id != supplier.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _supplierService.UpdateSupplierAsync(supplier);
+                TempData["SuccessMessage"] = "Cập nhật thông tin nhà cung cấp thành công!";
+                return RedirectToAction(nameof(Index));
+            }
+            return View(supplier);
+        }
+
+        // GET: Xử lý ngừng hoạt động (Xóa mềm)
+        // Lưu ý: Ở trang Index, nút Xóa đang gọi trực tiếp đến hàm này
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _supplierService.DeleteSupplierAsync(id);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Đã chuyển trạng thái nhà cung cấp thành Ngừng hoạt động!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không tìm thấy nhà cung cấp!";
+            }
+            return RedirectToAction(nameof(Index));
         }
     }
 }

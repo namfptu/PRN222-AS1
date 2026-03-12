@@ -18,6 +18,11 @@ namespace SalesManagement.Service.Implementations
             return await _supplierRepository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<Supplier>> GetActiveSuppliersAsync()
+        {
+            return await _supplierRepository.GetAsync(s => s.Status == true);
+        }
+
         public async Task<Supplier> GetSupplierByIdAsync(int id)
         {
             var supplier = await _supplierRepository.GetByIdAsync(id);
