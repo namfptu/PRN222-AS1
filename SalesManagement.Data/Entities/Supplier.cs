@@ -32,5 +32,6 @@ namespace SalesManagement.Data.Entities
          
         // Navigation property
         public virtual ICollection<ImportOrder> ImportOrders { get; set; } = new List<ImportOrder>();
+        public virtual ICollection<ProductSupplier> ProductSuppliers { get; set; } = new List<ProductSupplier>();
     }
 }

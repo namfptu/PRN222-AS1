@@ -72,6 +72,12 @@
                     <i class="fa fa-warehouse me-2"></i>Nhập kho
                 </a>
 
+                @* Quản lý tồn kho *@
+                <a href="@Url.Action("Index", "Report")"
+                   class="nav-item nav-link @(currentController == "Report" ? "active" : "")">
+                    <i class="fa fa-warehouse me-2"></i>Báo cáo kho
+                </a>
+
                 @* Quản lý Tài khoản *@
                 <a href="@Url.Action("Index", "User")" 
                    class="nav-item nav-link @(currentController == "Account" ? "active" : "")">

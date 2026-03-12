@@ -1,0 +1,188 @@
+﻿@model SalesManagement.WebApp.Models.CreateImportOrderViewModel
+
+@{
+    ViewData["Title"] = "Lập Phiếu Nhập Kho";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Lập Phiếu Nhập Kho</h1>
+
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <div asp-validation-summary="All" class="text-danger"></div>
+        </div>
+    }
+
+    <form asp-action="Create" method="post">
+        <div class="card mb-4 mt-3">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-file-invoice me-1"></i> Thông tin phiếu nhập
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="SupplierId" class="control-label fw-bold">Nhà cung cấp <span class="text-danger">*</span></label>
+                            <select asp-for="SupplierId" class="form-select" asp-items="ViewBag.Suppliers" required>
+                                <option value="">-- Chọn Nhà cung cấp --</option>
+                            </select>
+                            <span asp-validation-for="SupplierId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="Note" class="control-label fw-bold">Ghi chú</label>
+                            <input asp-for="Note" class="form-control" placeholder="Nhập ghi chú (nếu có)..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                <span><i class="fas fa-box-open me-1"></i> Danh sách mặt hàng nhập</span>
+                <button type="button" id="btnAddRow" class="btn btn-sm btn-light text-success fw-bold">
+                    <i class="fas fa-plus"></i> Thêm mặt hàng
+                </button>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-bordered table-striped mb-0" id="detailsTable">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 40%">Sản phẩm</th>
+                            <th style="width: 20%">Số lượng</th>
+                            <th style="width: 30%">Giá vốn (VNĐ)</th>
+                            <th style="width: 10%" class="text-center">Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="form-group mb-5">
+            <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-save"></i> Hoàn tất nhập kho</button>
+            <a asp-action="Index" class="btn btn-secondary btn-lg"><i class="fas fa-times"></i> Hủy bỏ</a>
+        </div>
+    </form>
+</div>
+
+<table style="display:none;">
+    <tbody id="rowTemplate">
+        <tr>
+            <td>
+                <select class="form-select product-select" required>
+                    <option value="">-- Chọn Sản phẩm --</option>
+                    @if (ViewBag.Products != null)
+                    {
+                        foreach (var item in ViewBag.Products as SelectList)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    }
+                </select>
+            </td>
+            <td>
+                <input type="number" class="form-control quantity-input" min="1" value="1" required />
+            </td>
+            <td>
+                <input type="number" class="form-control cost-input" step="1000" min="0" value="0" required />
+            </td>
+            <td class="text-center align-middle">
+                <button type="button" class="btn btn-sm btn-danger btn-remove-row"><i class="fas fa-trash"></i></button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+
+            // 1. Lắng nghe sự kiện khi Thủ kho chọn/đổi Nhà cung cấp
+            $('#SupplierId').change(function () {
+                var supplierId = $(this).val();
+
+                // Xóa sạch các dòng sản phẩm hiện tại trên lưới (vì đã đổi nhà cung cấp thì hàng cũng đổi theo)
+                $('#detailsTable tbody').empty();
+
+                if (supplierId) {
+                    // Gọi "Mini-API" để lấy danh sách hàng
+                    $.ajax({
+                        url: '/ImportOrder/GetProductsBySupplier',
+                        type: 'GET',
+                        data: { supplierId: supplierId },
+                        success: function (data) {
+                            // Cập nhật lại danh sách Dropdown trong template HTML ẩn
+                            var productSelect = $('#rowTemplate .product-select');
+                            productSelect.empty(); // Xóa các option cũ
+                            productSelect.append('<option value="">-- Chọn Sản phẩm --</option>');
+
+                            // Đổ dữ liệu JSON mới vào Dropdown
+                            $.each(data, function (i, item) {
+                                productSelect.append($('<option>', {
+                                    value: item.id,
+                                    text: item.name
+                                }));
+                            });
+
+                            // Tự động thêm 1 dòng đầu tiên cho thủ kho nhập luôn
+                            addRow();
+                        },
+                        error: function () {
+                            alert("Có lỗi xảy ra khi tải danh sách sản phẩm!");
+                        }
+                    });
+                } else {
+                    // Nếu chọn lại "--- Chọn Nhà cung cấp ---" thì làm rỗng template
+                    $('#rowTemplate .product-select').empty().append('<option value="">-- Chọn Sản phẩm --</option>');
+                }
+            });
+
+            // 2. Xử lý sự kiện bấm nút Thêm mặt hàng
+            $('#btnAddRow').click(function () {
+                var supplierId = $('#SupplierId').val();
+                if (!supplierId) {
+                    alert("Vui lòng chọn Nhà cung cấp trước khi thêm mặt hàng!");
+                    return;
+                }
+                addRow();
+            });
+
+            // 3. Xử lý sự kiện bấm nút Xóa (thùng rác)
+            $(document).on('click', '.btn-remove-row', function () {
+                var rowCount = $('#detailsTable tbody tr').length;
+                if (rowCount > 1) {
+                    $(this).closest('tr').remove();
+                    reindexTable(); // Phải đánh lại số thứ tự sau khi xóa
+                } else {
+                    alert('Phải có ít nhất 1 mặt hàng trong phiếu nhập!');
+                }
+            });
+
+            // Hàm copy template html và thêm vào bảng
+            function addRow() {
+                var newRow = $('#rowTemplate tr').clone();
+                $('#detailsTable tbody').append(newRow);
+                reindexTable();
+            }
+
+            // Hàm đánh lại chỉ số index cho các ô input (BẮT BUỘC để C# đọc được danh sách)
+            function reindexTable() {
+                $('#detailsTable tbody tr').each(function (index) {
+                    $(this).find('.product-select').attr('name', 'Details[' + index + '].ProductId');
+                    $(this).find('.quantity-input').attr('name', 'Details[' + index + '].Quantity');
+                    $(this).find('.cost-input').attr('name', 'Details[' + index + '].UnitCost');
+                });
+            }
+        });
+    </script>
+}

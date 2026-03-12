@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "G:\\SalesManagementSystem\\SalesManagement.Service\\SalesManagement.Service.csproj": {}
+    "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Service\\SalesManagement.Service.csproj": {}
   },
   "projects": {
-    "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj": {
+    "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj",
+        "projectUniqueName": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj",
         "projectName": "SalesManagement.Data",
-        "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "G:\\SalesManagementSystem\\SalesManagement.Data\\obj\\",
+        "projectPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj",
+        "packagesPath": "C:\\Users\\phucn\\.nuget\\packages\\",
+        "outputPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\phucn\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -87,24 +87,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj": {
+    "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Repo\\SalesManagement.Repo.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj",
+        "projectUniqueName": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Repo\\SalesManagement.Repo.csproj",
         "projectName": "SalesManagement.Repo",
-        "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "G:\\SalesManagementSystem\\SalesManagement.Repo\\obj\\",
+        "projectPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Repo\\SalesManagement.Repo.csproj",
+        "packagesPath": "C:\\Users\\phucn\\.nuget\\packages\\",
+        "outputPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Repo\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\phucn\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -119,8 +119,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj": {
-                "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj"
+              "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj": {
+                "projectPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj"
               }
             }
           }
@@ -135,7 +135,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -156,24 +156,24 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "G:\\SalesManagementSystem\\SalesManagement.Service\\SalesManagement.Service.csproj": {
+    "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Service\\SalesManagement.Service.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "G:\\SalesManagementSystem\\SalesManagement.Service\\SalesManagement.Service.csproj",
+        "projectUniqueName": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Service\\SalesManagement.Service.csproj",
         "projectName": "SalesManagement.Service",
-        "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Service\\SalesManagement.Service.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "G:\\SalesManagementSystem\\SalesManagement.Service\\obj\\",
+        "projectPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Service\\SalesManagement.Service.csproj",
+        "packagesPath": "C:\\Users\\phucn\\.nuget\\packages\\",
+        "outputPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Service\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\phucn\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -188,11 +188,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj": {
-                "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Data\\SalesManagement.Data.csproj"
+              "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj": {
+                "projectPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Data\\SalesManagement.Data.csproj"
               },
-              "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj": {
-                "projectPath": "G:\\SalesManagementSystem\\SalesManagement.Repo\\SalesManagement.Repo.csproj"
+              "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Repo\\SalesManagement.Repo.csproj": {
+                "projectPath": "E:\\VSCODE\\Project_PRN222\\PRN222-AS1\\SalesManagement.Repo\\SalesManagement.Repo.csproj"
               }
             }
           }
@@ -207,7 +207,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -228,7 +228,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

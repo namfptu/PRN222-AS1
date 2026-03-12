@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SalesManagement.Data.Entities;
 
 namespace SalesManagement.Data
@@ -27,6 +27,7 @@ namespace SalesManagement.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<ImportOrder> ImportOrders { get; set; }
         public DbSet<ImportOrderDetail> ImportOrderDetails { get; set; }
+        public DbSet<ProductSupplier> ProductSuppliers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -111,6 +112,10 @@ namespace SalesManagement.Data
                 .WithMany(p => p.ImportOrderDetails) 
                 .HasForeignKey(iod => iod.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Cấu hình khóa chính kép (Composite Key) cho bảng ProductSuppliers
+            modelBuilder.Entity<ProductSupplier>()
+                .HasKey(ps => new { ps.ProductId, ps.SupplierId });
 
             // ==============================
             // Configure Unique Constraints
