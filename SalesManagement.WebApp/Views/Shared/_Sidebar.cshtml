@@ -5,7 +5,11 @@
     
     // Lấy thông tin user từ session hoặc claims
     var userName = User.Identity?.Name ?? "Guest";
-    var userRole = User.IsInRole("Admin") ? "Admin" : "Staff";
+    var userRole = "Staff";
+    if (User.IsInRole("Admin")) { userRole = "Admin"; }
+    else if (User.IsInRole("ProductManager")) { userRole = "ProductManager"; }
+    else if (User.IsInRole("Sales")) { userRole = "Sales"; }
+    else if (User.IsInRole("Warehouse")) { userRole = "Warehouse"; }
 }
 
 <div class="sidebar pe-4 pb-3">
@@ -24,59 +28,82 @@
             </div>
         </div>
         <div class="navbar-nav w-100">
-            @* Dashboard *@
-            <a href="@Url.Action("Index", "Dashboard")" 
-               class="nav-item nav-link @(currentController == "Dashboard" ? "active" : "")">
-                <i class="fa fa-tachometer-alt me-2"></i>Dashboard
-            </a>
-
-            @* Quản lý Sản phẩm *@
-            <div class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle @(currentController == "Product" || currentController == "Category" ? "active" : "")" 
-                   data-bs-toggle="dropdown">
-                    <i class="fa fa-box me-2"></i>Sản phẩm
+            @* Dashboard (Admin & Sales) *@
+            @if (User.IsInRole("Admin") || User.IsInRole("Sales"))
+            {
+                <a href="@Url.Action("Index", "Dashboard")"
+                   class="nav-item nav-link @(currentController == "Dashboard" ? "active" : "")">
+                    <i class="fa fa-tachometer-alt me-2"></i>Dashboard
                 </a>
-                <div class="dropdown-menu bg-transparent border-0">
-                    <a href="@Url.Action("Index", "Category")" class="dropdown-item">Danh mục</a>
-                    <a href="@Url.Action("Index", "Product")" class="dropdown-item">Sản phẩm</a>
+            }
+
+            @* Quản lý Sản phẩm (ProductManager & Admin) *@
+            @if (User.IsInRole("ProductManager") || User.IsInRole("Admin"))
+            {
+                <div class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle @(currentController == "Product" || currentController == "Category" ? "active" : "")"
+                       data-bs-toggle="dropdown">
+                        <i class="fa fa-box me-2"></i>Sản phẩm
+                    </a>
+                    <div class="dropdown-menu bg-transparent border-0">
+                        <a href="@Url.Action("Index", "Category")" class="dropdown-item">Danh mục</a>
+                        <a href="@Url.Action("Index", "Product")" class="dropdown-item">Sản phẩm</a>
+                    </div>
                 </div>
-            </div>
+            }
 
-            @* Quản lý Đơn hàng *@
-            <a href="@Url.Action("Index", "Order")" 
-               class="nav-item nav-link @(currentController == "Order" ? "active" : "")">
-                <i class="fa fa-shopping-cart me-2"></i>Đơn hàng
-            </a>
+            @* Quản lý Đơn hàng (Sales & Admin) *@
+            @if (User.IsInRole("Sales") || User.IsInRole("Admin"))
+            {
+                <a href="@Url.Action("Index", "Order")"
+                   class="nav-item nav-link @(currentController == "Order" ? "active" : "")">
+                    <i class="fa fa-shopping-cart me-2"></i>Đơn hàng
+                </a>
+            }
 
-            @* Quản lý Khách hàng *@
-            <a href="@Url.Action("Index", "Customer")" 
-               class="nav-item nav-link @(currentController == "Customer" ? "active" : "")">
-                <i class="fa fa-users me-2"></i>Khách hàng
-            </a>
+            @* Quản lý Khách hàng (Sales & Admin) *@
+            @if (User.IsInRole("Sales") || User.IsInRole("Admin"))
+            {
+                <a href="@Url.Action("Index", "Customer")"
+                   class="nav-item nav-link @(currentController == "Customer" ? "active" : "")">
+                    <i class="fa fa-users me-2"></i>Khách hàng
+                </a>
+            }
 
-            @* Menu chỉ dành cho Admin *@
-            @if (User.IsInRole("Admin"))
+            @* Menu quản trị đa vai trò *@
+            @if (User.IsInRole("Admin") || User.IsInRole("Warehouse"))
             {
                 <hr class="my-2">
-                <small class="nav-item text-muted px-3">QUẢN TRỊ</small>
+                <small class="nav-item text-muted px-3">
+                    @(User.IsInRole("Admin") ? "QUẢN TRỊ HỆ THỐNG" : "QUẢN LÝ KHO")
+                </small>
 
-                @* Quản lý Nhà cung cấp *@
-                <a href="@Url.Action("Index", "Supplier")" 
+            @* Quản lý Nhà cung cấp (Warehouse & Admin) *@
+            @if (User.IsInRole("Warehouse") || User.IsInRole("Admin"))
+            {
+                <a href="@Url.Action("Index", "Supplier")"
                    class="nav-item nav-link @(currentController == "Supplier" ? "active" : "")">
                     <i class="fa fa-truck me-2"></i>Nhà cung cấp
                 </a>
+            }
 
-                @* Quản lý Nhập kho *@
-                <a href="@Url.Action("Index", "ImportOrder")" 
+            @* Quản lý Nhập kho (Warehouse & Admin) *@
+            @if (User.IsInRole("Warehouse") || User.IsInRole("Admin"))
+            {
+                <a href="@Url.Action("Index", "ImportOrder")"
                    class="nav-item nav-link @(currentController == "ImportOrder" ? "active" : "")">
                     <i class="fa fa-warehouse me-2"></i>Nhập kho
                 </a>
+            }
 
-                @* Quản lý Tài khoản *@
-                <a href="@Url.Action("Index", "User")" 
-                   class="nav-item nav-link @(currentController == "Account" ? "active" : "")">
-                    <i class="fa fa-user-cog me-2"></i>Tài khoản
-                </a>
+                @* Quản lý Tài khoản (Admin only) *@
+                @if (User.IsInRole("Admin"))
+                {
+                    <a href="@Url.Action("Index", "User")"
+                       class="nav-item nav-link @(currentController == "Account" ? "active" : "")">
+                        <i class="fa fa-user-cog me-2"></i>Tài khoản
+                    </a>
+                }
             }
         </div>
     </nav>

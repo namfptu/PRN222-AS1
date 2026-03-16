@@ -3,40 +3,30 @@ using SalesManagement.Data.Entities;
 
 namespace SalesManagement.Data
 {
-    /// <summary>
-    /// Provides seed data for the database.
-    /// Call SeedData.Initialize(dbContext) in Program.cs after database migration.
-    /// </summary>
+  
     public static class SeedData
     {
-        /// <summary>
-        /// Initialize database with seed data.
-        /// This method checks if data already exists before seeding.
-        /// </summary>
+       
         public static async Task InitializeAsync(SalesManagementDbContext context)
         {
-            // Check if database can connect (don't run migrations automatically)
-            // Run 'dotnet ef database update' manually before starting the app
+            
             if (!await context.Database.CanConnectAsync())
             {
                 throw new InvalidOperationException(
                     "Cannot connect to database. Please run 'dotnet ef database update' first.");
             }
             
-            // Seed in order of dependencies
+           
             await SeedAccountsAsync(context);
             await SeedCategoriesAsync(context);
             await SeedSuppliersAsync(context);
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
             
-            // Save all changes
+            
             await context.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// Synchronous version of Initialize for non-async contexts
-        /// </summary>
         public static void Initialize(SalesManagementDbContext context)
         {
             InitializeAsync(context).GetAwaiter().GetResult();
