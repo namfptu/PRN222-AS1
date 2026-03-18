@@ -14,8 +14,9 @@ namespace SalesManagement.Data.Entities
         [StringLength(200)]
         public string CompanyName { get; set; } = string.Empty;
 
-        [Required]
-        [StringLength(20)]
+        [Required(ErrorMessage = "Số điện thoại không được để trống")]
+        [StringLength(10, ErrorMessage = "Số điện thoại phải có đúng 10 số")]
+        [RegularExpression(@"^[0-9]{10}$", ErrorMessage = "Số điện thoại phải là 10 chữ số")]
         public string ContactPhone { get; set; } = string.Empty;
 
         [StringLength(300)]

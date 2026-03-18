@@ -45,15 +45,20 @@ namespace SalesManagement.Data
         #region Seed Accounts
         private static async Task SeedAccountsAsync(SalesManagementDbContext context)
         {
-            if (await context.Accounts.AnyAsync())
-                return;
-
             var accounts = new List<Account>
             {
                 new Account
                 {
                     Email = "admin@electronics.com",
-                    Password = "admin123", // TODO: Hash password in production
+                    Password = "admin123",
+                    FullName = "System Administrator",
+                    Role = (int)AccountRole.Admin,
+                    IsActive = true
+                },
+                new Account
+                {
+                    Email = "admin2@electronics.com",
+                    Password = "admin123",
                     FullName = "System Administrator",
                     Role = (int)AccountRole.Admin,
                     IsActive = true
@@ -84,16 +89,19 @@ namespace SalesManagement.Data
                 }
             };
 
-            await context.Accounts.AddRangeAsync(accounts);
+            foreach (var account in accounts)
+            {
+                if (!await context.Accounts.AnyAsync(a => a.Email == account.Email))
+                {
+                    await context.Accounts.AddAsync(account);
+                }
+            }
         }
         #endregion
 
         #region Seed Categories
         private static async Task SeedCategoriesAsync(SalesManagementDbContext context)
         {
-            if (await context.Categories.AnyAsync())
-                return;
-
             var categories = new List<Category>
             {
                 new Category { Name = "Smartphones", Description = "Mobile phones and accessories", Status = true },
@@ -105,7 +113,13 @@ namespace SalesManagement.Data
                 new Category { Name = "Wearables", Description = "Smartwatches and fitness trackers", Status = true }
             };
 
-            await context.Categories.AddRangeAsync(categories);
+            foreach (var category in categories)
+            {
+                if (!await context.Categories.AnyAsync(c => c.Name == category.Name))
+                {
+                    await context.Categories.AddAsync(category);
+                }
+            }
             await context.SaveChangesAsync(); // Save to get IDs for Products
         }
         #endregion
@@ -113,9 +127,6 @@ namespace SalesManagement.Data
         #region Seed Suppliers
         private static async Task SeedSuppliersAsync(SalesManagementDbContext context)
         {
-            if (await context.Suppliers.AnyAsync())
-                return;
-
             var suppliers = new List<Supplier>
             {
                 new Supplier
@@ -160,16 +171,19 @@ namespace SalesManagement.Data
                 }
             };
 
-            await context.Suppliers.AddRangeAsync(suppliers);
+            foreach (var supplier in suppliers)
+            {
+                if (!await context.Suppliers.AnyAsync(s => s.CompanyName == supplier.CompanyName))
+                {
+                    await context.Suppliers.AddAsync(supplier);
+                }
+            }
         }
         #endregion
 
         #region Seed Customers
         private static async Task SeedCustomersAsync(SalesManagementDbContext context)
         {
-            if (await context.Customers.AnyAsync())
-                return;
-
             var customers = new List<Customer>
             {
                 new Customer
@@ -214,15 +228,19 @@ namespace SalesManagement.Data
                 }
             };
 
-            await context.Customers.AddRangeAsync(customers);
+            foreach (var customer in customers)
+            {
+                if (!await context.Customers.AnyAsync(c => c.Phone == customer.Phone))
+                {
+                    await context.Customers.AddAsync(customer);
+                }
+            }
         }
         #endregion
 
         #region Seed Products
         private static async Task SeedProductsAsync(SalesManagementDbContext context)
         {
-            if (await context.Products.AnyAsync())
-                return;
 
             // Get category IDs
             var smartphoneCategory = await context.Categories.FirstOrDefaultAsync(c => c.Name == "Smartphones");
@@ -491,9 +509,12 @@ namespace SalesManagement.Data
                 });
             }
 
-            if (products.Any())
+            foreach (var product in products)
             {
-                await context.Products.AddRangeAsync(products);
+                if (!await context.Products.AnyAsync(p => p.Code == product.Code))
+                {
+                    await context.Products.AddAsync(product);
+                }
             }
         }
         #endregion
