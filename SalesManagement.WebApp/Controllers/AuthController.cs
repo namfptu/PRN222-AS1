@@ -61,7 +61,7 @@ namespace SalesManagement.WebApp.Controllers
                 return View(model);
             }
 
-            // Tạo Claims
+            // Tạo Claims.....
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, account.Id.ToString()),
