@@ -13,15 +13,18 @@ namespace SalesManagement.WebApp.Controllers
         private readonly IImportOrderService _importOrderService;
         private readonly ISupplierService _supplierService;
         private readonly IGenericRepository<Product> _productRepo; // Tạm dùng Repo vì TV2 chưa làm xong ProductService
+        private readonly IGenericRepository<Supplier> _supplierRepo;
 
         public ImportOrderController(
             IImportOrderService importOrderService,
             ISupplierService supplierService,
-            IGenericRepository<Product> productRepo)
+            IGenericRepository<Product> productRepo,
+            IGenericRepository<Supplier> supplierRepo)
         {
             _importOrderService = importOrderService;
             _supplierService = supplierService;
             _productRepo = productRepo;
+            _supplierRepo = supplierRepo;
         }
 
         // GET: Hiển thị danh sách phiếu nhập
@@ -31,18 +34,30 @@ namespace SalesManagement.WebApp.Controllers
             return View(orders);
         }
 
-        // GET: Form tạo phiếu nhập mới
-        public async Task<IActionResult> Create()
+        // GET: Hiển thị form tạo phiếu nhập
+        public IActionResult Create(int? selectedSupplierId) // Thêm tham số nhận ID từ URL
         {
-            // Lấy danh sách Nhà cung cấp (chỉ lấy Active) để nạp vào Dropdown
-            var suppliers = await _supplierService.GetActiveSuppliersAsync();
-            ViewBag.Suppliers = new SelectList(suppliers, "Id", "CompanyName");
+            // 1. Load danh sách Nhà cung cấp (Giữ nguyên)
+            var suppliers = _supplierRepo.GetQueryable().Where(s => s.Status == true).ToList();
+            ViewBag.Suppliers = new SelectList(suppliers, "Id", "CompanyName", selectedSupplierId);
 
-            // Lấy danh sách Sản phẩm nạp vào Dropdown
-            var products = await _productRepo.GetAllAsync();
-            ViewBag.Products = new SelectList(products, "Id", "Name");
+            // 2. Thuần MVC: Nếu URL có truyền lên selectedSupplierId, ta load sẵn Sản phẩm gửi ra View
+            if (selectedSupplierId.HasValue)
+            {
+                var products = _productRepo.GetQueryable()
+                    .Where(p => p.ProductSuppliers.Any(ps => ps.SupplierId == selectedSupplierId.Value))
+                    .Select(p => new { Id = p.Id, Name = p.Name })
+                    .ToList();
 
-            return View(new CreateImportOrderViewModel());
+                ViewBag.Products = new SelectList(products, "Id", "Name");
+                ViewBag.SelectedSupplierId = selectedSupplierId.Value; // Lưu lại để View biết
+            }
+            else
+            {
+                ViewBag.Products = null; // Chưa chọn nhà cung cấp thì rỗng
+            }
+
+            return View();
         }
 
         // POST: Xử lý lưu phiếu nhập
@@ -81,26 +96,6 @@ namespace SalesManagement.WebApp.Controllers
 
             ModelState.AddModelError("", "Vui lòng chọn ít nhất 1 sản phẩm để nhập kho.");
             return View(model);
-        }
-
-        // GET: API lấy danh sách Sản phẩm theo Nhà cung cấp (Dùng cho AJAX)
-        [HttpGet]
-        public IActionResult GetProductsBySupplier(int supplierId)
-        {
-            // Dùng GetQueryable() từ GenericRepository để truy vấn LINQ
-            var query = _productRepo.GetQueryable();
-
-            // Tìm các sản phẩm có liên kết với SupplierId này thông qua bảng trung gian ProductSuppliers
-            var products = query.Where(p => p.ProductSuppliers.Any(ps => ps.SupplierId == supplierId))
-                                .Select(p => new
-                                {
-                                    id = p.Id,
-                                    name = p.Name
-                                })
-                                .ToList();
-
-            // Trả về dữ liệu dạng JSON cho JavaScript đọc
-            return Json(products);
         }
 
         // GET: Xem chi tiết phiếu nhập
