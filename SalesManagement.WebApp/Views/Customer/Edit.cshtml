@@ -1,0 +1,65 @@
+@model SalesManagement.Data.Entities.Customer
+
+@{
+    ViewData["Title"] = "Cập nhật Khách hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Cập nhật Khách hàng</h1>
+
+    <div class="card mb-4 mt-3">
+        <div class="card-header">
+            <i class="fas fa-user-edit me-1"></i> Chỉnh sửa thông tin khách hàng
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="Status" />
+                <input type="hidden" asp-for="CreatedDate" />
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="FullName" class="control-label fw-bold">Họ và tên <span class="text-danger">*</span></label>
+                            <input asp-for="FullName" class="form-control" required />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Phone" class="control-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+                            <input asp-for="Phone" class="form-control" required />
+                            <span asp-validation-for="Phone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="Email" class="control-label fw-bold">Email</label>
+                            <input asp-for="Email" type="email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="Address" class="control-label fw-bold">Địa chỉ</label>
+                            <input asp-for="Address" class="form-control" />
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Cập nhật</button>
+                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

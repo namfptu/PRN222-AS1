@@ -39,6 +39,7 @@ namespace SalesManagement.WebApp
             builder.Services.AddScoped(typeof(SalesManagement.Repo.Interfaces.IGenericRepository<>), typeof(SalesManagement.Repo.Implementations.GenericRepository<>)); // BỔ SUNG đăng ký GenericRepository
             // Register Services
             builder.Services.AddScoped<SalesManagement.Service.Interfaces.IAccountService, SalesManagement.Service.Implementations.AccountService>();
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ISupplierService, SupplierService>();
             builder.Services.AddScoped<IImportOrderService, ImportOrderService>();
             builder.Services.AddScoped<IReportService, ReportService>();

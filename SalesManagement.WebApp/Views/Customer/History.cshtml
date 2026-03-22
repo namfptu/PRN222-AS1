@@ -1,0 +1,96 @@
+@model SalesManagement.WebApp.Models.CustomerPurchaseHistoryViewModel
+
+@{
+    ViewData["Title"] = "Lịch sử mua hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Lịch sử mua hàng của khách</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="fas fa-user me-1"></i> Thông tin khách hàng
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Họ và tên:</strong> @Model.Customer.FullName</li>
+                    <li class="list-group-item"><strong>Số điện thoại:</strong> @Model.Customer.Phone</li>
+                    <li class="list-group-item"><strong>Email:</strong> @(string.IsNullOrWhiteSpace(Model.Customer.Email) ? "Chưa cập nhật" : Model.Customer.Email)</li>
+                    <li class="list-group-item"><strong>Địa chỉ:</strong> @(string.IsNullOrWhiteSpace(Model.Customer.Address) ? "Chưa cập nhật" : Model.Customer.Address)</li>
+                    <li class="list-group-item"><strong>Ngày tạo hồ sơ:</strong> @Model.Customer.CreatedDate.ToString("dd/MM/yyyy HH:mm")</li>
+                </ul>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white fw-bold">
+                    <i class="fas fa-chart-line me-1"></i> Tổng quan mua hàng
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Tổng số đơn:</strong> @Model.TotalOrders</li>
+                    <li class="list-group-item"><strong>Tổng chi tiêu:</strong> <span class="text-danger fw-bold">@Model.TotalSpent.ToString("N0") VNĐ</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white fw-bold">
+                    <i class="fas fa-receipt me-1"></i> Danh sách đơn hàng
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-bordered table-striped table-hover mb-0">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Mã đơn</th>
+                                <th>Ngày tạo</th>
+                                <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th>Ghi chú</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Orders.Any())
+                            {
+                                foreach (var order in Model.Orders)
+                                {
+                                    <tr>
+                                        <td><span class="fw-bold text-primary">@order.Code</span></td>
+                                        <td>@order.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="text-end fw-bold text-danger">@order.TotalAmount.ToString("N0") VNĐ</td>
+                                        <td>
+                                            @if (order.Status == SalesManagement.Data.Entities.OrderStatus.Done)
+                                            {
+                                                <span class="badge bg-success">Hoàn thành</span>
+                                            }
+                                            else if (order.Status == SalesManagement.Data.Entities.OrderStatus.Cancelled)
+                                            {
+                                                <span class="badge bg-danger">Đã hủy</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-warning text-dark">Pending</span>
+                                            }
+                                        </td>
+                                        <td>@(string.IsNullOrWhiteSpace(order.Note) ? "Không có" : order.Note)</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">Khách hàng này chưa có lịch sử mua hàng.</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="text-end">
+                <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
+            </div>
+        </div>
+    </div>
+</div>
