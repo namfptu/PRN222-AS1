@@ -1,0 +1,140 @@
+@model SalesManagement.WebApp.Models.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "Tạo Đơn hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Tạo mới Đơn hàng</h1>
+
+    <div class="card mb-4 mt-3">
+        <div class="card-header">
+            <i class="fas fa-shopping-cart me-1"></i> Nhập thông tin bán hàng
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="CustomerId" class="control-label fw-bold">Khách hàng <span class="text-danger">*</span></label>
+                            <select asp-for="CustomerId" asp-items="ViewBag.Customers" class="form-select">
+                                <option value="">-- Chọn khách hàng --</option>
+                            </select>
+                            <span asp-validation-for="CustomerId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label asp-for="Note" class="control-label fw-bold">Ghi chú</label>
+                            <textarea asp-for="Note" class="form-control" rows="3" placeholder="Nhập ghi chú nếu có..."></textarea>
+                            <span asp-validation-for="Note" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Mã SP</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Đơn giá</th>
+                                <th>Tồn kho</th>
+                                <th width="150">Số lượng bán</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items.Any())
+                            {
+                                for (int i = 0; i < Model.Items.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Model.Items[i].ProductCode
+                                            <input asp-for="Items[@i].ProductId" type="hidden" />
+                                            <input asp-for="Items[@i].ProductCode" type="hidden" />
+                                            <input asp-for="Items[@i].ProductName" type="hidden" />
+                                            <input asp-for="Items[@i].UnitPrice" type="hidden" />
+                                            <input asp-for="Items[@i].AvailableQuantity" type="hidden" />
+                                        </td>
+                                        <td>@Model.Items[i].ProductName</td>
+                                        <td class="text-end">@Model.Items[i].UnitPrice.ToString("N0") VNĐ</td>
+                                        <td class="text-center">@Model.Items[i].AvailableQuantity</td>
+                                        <td>
+                                            <input asp-for="Items[@i].Quantity"
+                                                   class="form-control quantity-input"
+                                                   type="number"
+                                                   min="0"
+                                                   max="@Model.Items[i].AvailableQuantity"
+                                                   data-price="@Model.Items[i].UnitPrice" />
+                                            <span asp-validation-for="Items[@i].Quantity" class="text-danger"></span>
+                                        </td>
+                                        <td class="text-end subtotal-cell">0 VNĐ</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="6" class="text-center">Chưa có sản phẩm khả dụng để bán.</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-warning">
+                                <td colspan="5" class="text-end fw-bold text-danger">TỔNG CỘNG:</td>
+                                <td class="text-end fw-bold text-danger fs-5" id="grandTotal">0 VNĐ</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="form-group mt-4">
+                    <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Lưu đơn hàng</button>
+                    <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        function updateOrderTotals() {
+            const rows = document.querySelectorAll("tbody tr");
+            let grandTotal = 0;
+
+            rows.forEach(function (row) {
+                const quantityInput = row.querySelector(".quantity-input");
+                const subtotalCell = row.querySelector(".subtotal-cell");
+
+                if (!quantityInput || !subtotalCell) {
+                    return;
+                }
+
+                const quantity = parseInt(quantityInput.value || "0");
+                const price = parseFloat(quantityInput.dataset.price || "0");
+                const subtotal = quantity * price;
+
+                subtotalCell.textContent = subtotal.toLocaleString("vi-VN") + " VNĐ";
+                grandTotal += subtotal;
+            });
+
+            document.getElementById("grandTotal").textContent = grandTotal.toLocaleString("vi-VN") + " VNĐ";
+        }
+
+        document.querySelectorAll(".quantity-input").forEach(function (input) {
+            input.addEventListener("input", updateOrderTotals);
+        });
+
+        updateOrderTotals();
+    </script>
+}

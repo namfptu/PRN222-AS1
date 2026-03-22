@@ -1,0 +1,99 @@
+@model SalesManagement.Data.Entities.Order
+
+@{
+    ViewData["Title"] = "Chi tiết Đơn hàng";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Chi tiết Đơn hàng</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-primary text-white fw-bold">
+                    <i class="fas fa-info-circle"></i> Thông tin chung
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Mã đơn:</strong> <span class="text-primary fw-bold">@Model.Code</span></li>
+                    <li class="list-group-item"><strong>Ngày tạo:</strong> @Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</li>
+                    <li class="list-group-item">
+                        <strong>Trạng thái:</strong>
+                        @if (Model.Status == SalesManagement.Data.Entities.OrderStatus.Done)
+                        {
+                            <span class="badge bg-success">Hoàn thành</span>
+                        }
+                        else if (Model.Status == SalesManagement.Data.Entities.OrderStatus.Cancelled)
+                        {
+                            <span class="badge bg-danger">Đã hủy</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        }
+                    </li>
+                    <li class="list-group-item"><strong>Người tạo:</strong> @(Model.CreatedByAccount?.FullName ?? "N/A")</li>
+                    <li class="list-group-item"><strong>Ghi chú:</strong> @(string.IsNullOrWhiteSpace(Model.Note) ? "Không có" : Model.Note)</li>
+                </ul>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white fw-bold">
+                    <i class="fas fa-user"></i> Thông tin khách hàng
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Khách hàng:</strong> @(Model.Customer?.FullName ?? Model.CustomerName ?? "Khách lẻ")</li>
+                    <li class="list-group-item"><strong>Số điện thoại:</strong> @(Model.Customer?.Phone ?? Model.CustomerPhone ?? "N/A")</li>
+                    <li class="list-group-item"><strong>Email:</strong> @(string.IsNullOrWhiteSpace(Model.Customer?.Email) ? "Chưa cập nhật" : Model.Customer?.Email)</li>
+                    <li class="list-group-item"><strong>Địa chỉ:</strong> @(string.IsNullOrWhiteSpace(Model.Customer?.Address) ? "Chưa cập nhật" : Model.Customer?.Address)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-success text-white fw-bold">
+                    <i class="fas fa-box-open"></i> Chi tiết mặt hàng
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-striped table-bordered mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>STT</th>
+                                <th>Sản phẩm</th>
+                                <th class="text-center">Số lượng</th>
+                                <th class="text-end">Đơn giá bán</th>
+                                <th class="text-end">Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int stt = 1;
+                            }
+                            @foreach (var item in Model.OrderDetails)
+                            {
+                                <tr>
+                                    <td class="text-center">@(stt++)</td>
+                                    <td>@(item.Product?.Name ?? "Sản phẩm không xác định")</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-end">@item.UnitPrice.ToString("N0") VNĐ</td>
+                                    <td class="text-end fw-bold">@item.SubTotal.ToString("N0") VNĐ</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-warning">
+                                <td colspan="4" class="text-end fw-bold text-danger">TỔNG CỘNG:</td>
+                                <td class="text-end fw-bold text-danger fs-5">@Model.TotalAmount.ToString("N0") VNĐ</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            <div class="text-end">
+                <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Quay lại danh sách</a>
+                <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> In hóa đơn</button>
+            </div>
+        </div>
+    </div>
+</div>
