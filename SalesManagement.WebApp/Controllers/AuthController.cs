@@ -184,5 +184,40 @@ namespace SalesManagement.WebApp.Controllers
             TempData["SuccessMessage"] = "Cập nhật thông tin thành công!";
             return RedirectToAction("Profile");
         }
+
+        // POST: /Auth/ChangePassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+            var account = _context.Accounts.FirstOrDefault(a => a.Id == userId);
+
+            if (account == null)
+            {
+                return NotFound();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Vui lòng kiểm tra lại thông tin nhập vào (độ dài mật khẩu, xác nhận mật khẩu...).";
+                return RedirectToAction("Profile");
+            }
+
+            if (account.Password != model.CurrentPassword)
+            {
+                TempData["ErrorMessage"] = "Mật khẩu hiện tại không chính xác.";
+                return RedirectToAction("Profile");
+            }
+
+            // Update password
+            account.Password = model.NewPassword;
+            // TODO: Hash password in real production
+            
+            _context.SaveChanges();
+
+            TempData["SuccessMessage"] = "Đổi mật khẩu thành công!";
+            return RedirectToAction("Profile");
+        }
     }
 }

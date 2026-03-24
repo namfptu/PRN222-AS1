@@ -1,8 +1,9 @@
-﻿@model IEnumerable<SalesManagement.Data.Entities.Supplier>
+@model IEnumerable<SalesManagement.Data.Entities.Supplier>
 
 @{
     ViewData["Title"] = "Quản lý Nhà cung cấp";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var isWarehouse = User.IsInRole("Warehouse");
 }
 
 <div class="container-fluid px-4">
@@ -17,8 +18,12 @@
     }
 
     <div class="card mb-4 mt-3">
-        <div class="card-header">
-            <a asp-action="Create" class="btn btn-primary"><i class="fas fa-plus"></i> Thêm mới</a>
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="fas fa-table me-1"></i> Danh sách nhà cung cấp</span>
+            @if (isWarehouse)
+            {
+                <a asp-action="Create" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Thêm mới</a>
+            }
         </div>
         <div class="card-body">
             <table class="table table-bordered table-striped table-hover">
@@ -29,7 +34,10 @@
                         <th>Email</th>
                         <th>Địa chỉ</th>
                         <th>Trạng thái</th>
-                        <th>Hành động</th>
+                        @if (isWarehouse)
+                        {
+                            <th class="text-center">Hành động</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -52,17 +60,20 @@
                                         <span class="badge bg-secondary">Ngừng HĐ</span>
                                     }
                                 </td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn ngừng hoạt động nhà cung cấp này?');">Xóa</a>
-                                </td>
+                                @if (isWarehouse)
+                                {
+                                    <td class="text-center">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Sửa</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn ngừng hoạt động nhà cung cấp này?');">Xóa</a>
+                                    </td>
+                                }
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="6" class="text-center">Chưa có dữ liệu nhà cung cấp nào.</td>
+                            <td colspan="@(isWarehouse ? 6 : 5)" class="text-center">Chưa có dữ liệu nhà cung cấp nào.</td>
                         </tr>
                     }
                 </tbody>

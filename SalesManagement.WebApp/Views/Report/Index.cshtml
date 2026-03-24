@@ -1,8 +1,9 @@
-﻿@model IEnumerable<SalesManagement.Data.Entities.Product>
+@model IEnumerable<SalesManagement.Data.Entities.Product>
 
 @{
     ViewData["Title"] = "Báo cáo hàng sắp hết";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var isWarehouse = User.IsInRole("Warehouse");
 }
 
 <div class="container-fluid px-4">
@@ -21,7 +22,10 @@
                         <th>Tên Mặt Hàng</th>
                         <th>Đơn Giá Bán</th>
                         <th class="text-center">Tồn Kho Hiện Tại</th>
-                        <th class="text-center">Hành động</th>
+                        @if (isWarehouse)
+                        {
+                            <th class="text-center">Hành động</th>
+                        }
                     </tr>
                 </thead>
                 <tbody>
@@ -43,18 +47,21 @@
                                         <span class="badge bg-danger fs-6">@item.Quantity</span>
                                     }
                                 </td>
-                                <td class="text-center">
-                                    <a asp-controller="ImportOrder" asp-action="Create" class="btn btn-sm btn-outline-danger">
-                                        <i class="fas fa-plus-circle"></i> Lập phiếu nhập
-                                    </a>
-                                </td>
+                                @if (isWarehouse)
+                                {
+                                    <td class="text-center">
+                                        <a asp-controller="ImportOrder" asp-action="Create" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-plus-circle"></i> Lập phiếu nhập
+                                        </a>
+                                    </td>
+                                }
                             </tr>
                         }
                     }
                     else
                     {
                         <tr>
-                            <td colspan="5" class="text-center fw-bold text-success">
+                            <td colspan="@(isWarehouse ? 5 : 4)" class="text-center fw-bold text-success">
                                 <i class="fas fa-check-circle"></i> Không có mặt hàng nào cần nhập thêm!
                             </td>
                         </tr>

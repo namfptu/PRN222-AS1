@@ -1,8 +1,9 @@
-﻿@model IEnumerable<SalesManagement.Data.Entities.ImportOrder>
+@model IEnumerable<SalesManagement.Data.Entities.ImportOrder>
 
 @{
     ViewData["Title"] = "Lịch sử Nhập Kho";
     Layout = "~/Views/Shared/_AdminLayout.cshtml"; // Thay đổi layout theo project của bạn nếu cần
+    var isWarehouse = User.IsInRole("Warehouse");
 }
 
 <div class="container-fluid px-4">
@@ -19,7 +20,10 @@
     <div class="card mb-4 mt-3">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span><i class="fas fa-table me-1"></i> Danh sách các phiếu đã nhập</span>
-            <a asp-action="Create" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tạo Phiếu mới</a>
+            @if (isWarehouse)
+            {
+                <a asp-action="Create" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tạo Phiếu mới</a>
+            }
         </div>
         <div class="card-body">
             <table class="table table-bordered table-striped table-hover">

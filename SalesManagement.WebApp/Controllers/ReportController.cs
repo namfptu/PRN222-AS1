@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SalesManagement.Service.Interfaces;
 
 namespace SalesManagement.WebApp.Controllers
 {
+    [Authorize(Roles = "Warehouse,Admin")]
     public class ReportController : Controller
     {
         private readonly IReportService _reportService;

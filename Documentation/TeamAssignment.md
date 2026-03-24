@@ -24,10 +24,9 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
         *   Danh sách tài khoản (CRUD).
         *   Reset mật khẩu cho nhân viên.
         *   Phân quyền (Role: Admin, ProductManager, Sales, Warehouse).
-    3.  **Dashboard (Admin Only):**
-        *   Thống kê doanh thu (Ngày/Tháng).
-        *   Biểu đồ tăng trưởng.
-        *   Tổng hợp số liệu (Sản phẩm, Đơn hàng...).
+    3.  **Dashboard (Admin/Overview):**
+        *   Hiển thị thông tin tổng quan của cả 3 phân hệ: Sales, Product, và Warehouse.
+        *   Tích hợp bộ điều hướng Sidebar theo quyền truy cập.
 
 ### 👤 Thành viên 2 (ProductManager)
 **Trách nhiệm:** Quản lý dữ liệu nền tảng (Sản phẩm) - Xương sống của hệ thống.
@@ -40,6 +39,9 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
         *   Kiểm tra logic (Không xóa sản phẩm đã có đơn hàng -> Chuyển trạng thái ngưng bán).
     3.  **Giao diện Read-Only:**
         *   Làm màn hình `Index` (Danh sách) riêng cho Sales/Warehouse (chỉ xem, ẩn nút sửa/xóa).
+    4.  **Dashboard (Product Area):**
+        *   Hiển thị thống kê tổng quan Danh mục, Sản phẩm.
+        *   Danh sách cảnh báo sản phẩm sắp hết hàng (Low Stock).
 
 ### 👤 Thành viên 3 (Sales)
 **Trách nhiệm:** Quy trình bán hàng đầu ra (Output) - Quan trọng nhất cho Sales Staff.
@@ -53,7 +55,10 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
         *   Xem chi tiết đơn hàng (In hóa đơn - View).
     3.  **Xử lý đơn:**
         *   Cập nhật trạng thái (Đang giao -> Hoàn thành / Hủy).
-        *   Logic phân quyền Hủy đơn (Sales chỉ hủy Pending).
+        *   Được cấp toàn quyền thao tác (Create/Update/Delete) trên module Order và Customer, chặn Admin thao tác.
+    4.  **Dashboard (Sales Area):**
+        *   Thống kê Doanh thu (Hôm nay/Tổng), số lượng đơn hàng, số lượng khách hàng.
+        *   Bảng thông tin Đơn hàng bán mới nhất.
 
 ### 👤 Thành viên 4 (Warehouse)
 **Trách nhiệm:** Quy trình nhập hàng đầu vào (Input) và Đối tác.
@@ -65,7 +70,11 @@ Tài liệu này quy định rõ trách nhiệm của 4 thành viên trong team 
         *   **Cập nhật tồn kho:** Khi nhập hàng -> Tự động cộng số lượng vào bảng Product (Trigger hoặc Code logic).
         *   Tính toán tổng chi phí nhập hàng.
     3.  **Báo cáo kho (Optional):**
-        *   Xem danh sách sản phẩm sắp hết hàng (Low stock).
+        *   Xem danh sách sản phẩm sắp hết hàng (Low stock) và có phím tắt tạo Phiếu Nhập.
+        *   Toàn quyền CUD trên Supplier, ImportOrder và Report (Admin bị chặn thao tác).
+    4.  **Dashboard (Warehouse Area):**
+        *   Thống kê Nhà cung cấp, chi phí nhập hàng, số đơn nhập trong ngày.
+        *   Bảng thông tin Đơn nhập kho mới nhất.
 
 ---
 

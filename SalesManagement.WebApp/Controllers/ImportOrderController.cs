@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SalesManagement.Data.Entities;
 using SalesManagement.Repo.Interfaces;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 
 namespace SalesManagement.WebApp.Controllers
 {
+    [Authorize(Roles = "Warehouse,Admin")]
     public class ImportOrderController : Controller
     {
         private readonly IImportOrderService _importOrderService;
@@ -35,6 +37,7 @@ namespace SalesManagement.WebApp.Controllers
         }
 
         // GET: Hiển thị form tạo phiếu nhập
+        [Authorize(Roles = "Warehouse")]
         public IActionResult Create(int? selectedSupplierId) // Thêm tham số nhận ID từ URL
         {
             // 1. Load danh sách Nhà cung cấp (Giữ nguyên)
@@ -63,6 +66,7 @@ namespace SalesManagement.WebApp.Controllers
         // POST: Xử lý lưu phiếu nhập
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Warehouse")]
         public async Task<IActionResult> Create(CreateImportOrderViewModel model)
         {
             // Lấy UserId của người tạo phiếu nhập (để lưu vào CreatedBy)
