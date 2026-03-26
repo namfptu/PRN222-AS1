@@ -1,0 +1,45 @@
+@model SalesManagement.Data.Entities.Category
+
+@{
+    ViewData["Title"] = "Thêm danh mục mới";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4 justify-content-center">
+        <div class="col-sm-12 col-xl-6">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Thông tin danh mục sản phẩm</h6>
+                <form asp-action="Create" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">Tên danh mục <span class="text-danger">*</span></label>
+                        <input asp-for="Name" class="form-control" placeholder="Nhập tên danh mục">
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Mô tả</label>
+                        <textarea asp-for="Description" class="form-control" rows="3" placeholder="Nhập mô tả chi tiết"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="Status" class="form-check-input" type="checkbox">
+                        <label class="form-check-label" asp-for="Status">Đang hoạt động</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary mt-3"><i class="fa fa-arrow-left me-2"></i>Quay lại</a>
+                        <button type="submit" class="btn btn-primary mt-3"><i class="fa fa-save me-2"></i>Lưu lại</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

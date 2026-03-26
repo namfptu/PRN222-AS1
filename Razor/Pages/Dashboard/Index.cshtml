@@ -1,0 +1,246 @@
+@page
+@namespace Razor.Pages.Dashboards
+@model Razor.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+    var isAdmin = User.IsInRole("Admin");
+    var isSales = User.IsInRole("Sales") || isAdmin;
+    var isProduct = User.IsInRole("ProductManager") || isAdmin;
+    var isWarehouse = User.IsInRole("Warehouse") || isAdmin;
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4 mb-4">
+        <div class="col-12">
+            <h4 class="mb-0 text-primary">📊 Hệ thống Quản lý Bán hàng</h4>
+            <p class="text-muted">Chào mừng bạn quay trở lại, @User.Identity?.Name!</p>
+        </div>
+    </div>
+
+    @* ==================== SALES ==================== *@
+    @if (isSales)
+    {
+        <div class="mb-5">
+            <h5 class="mb-3">🛒 Khu vực Bán hàng</h5>
+            <div class="row g-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-primary">📈</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Doanh thu hôm nay</p>
+                            <h6 class="mb-0">@String.Format("{0:N0}", Model.TodayRevenue) ₫</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-primary">📊</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Tổng doanh thu</p>
+                            <h6 class="mb-0">@String.Format("{0:N0}", Model.TotalRevenue) ₫</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-primary">🧾</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Đơn hàng hôm nay</p>
+                            <h6 class="mb-0">@Model.TodayOrders đơn</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-primary">👥</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Tổng khách hàng</p>
+                            <h6 class="mb-0">@Model.TotalCustomers người</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-2">
+                <div class="col-12">
+                    <div class="bg-light rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">🕒 Đơn hàng gần đây</h6>
+                            <a asp-page="/Order/Index">Xem tất cả</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                <thead>
+                                    <tr class="text-dark">
+                                        <th>Mã đơn</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Tổng tiền</th>
+                                        <th>Trạng thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var order in Model.RecentOrders)
+                                    {
+                                        <tr>
+                                            <td>@order.Code</td>
+                                            <td>@order.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>@String.Format("{0:N0}", order.TotalAmount) ₫</td>
+                                            <td>
+                                                @switch (order.Status)
+                                                {
+                                                    case SalesManagement.Data.Entities.OrderStatus.Pending:
+                                                        <span class="badge bg-warning">Chờ xử lý</span> break;
+                                                    case SalesManagement.Data.Entities.OrderStatus.Done:
+                                                        <span class="badge bg-success">Hoàn thành</span> break;
+                                                    default:
+                                                        <span class="badge bg-danger">Đã hủy</span> break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @* ==================== PRODUCTS ==================== *@
+    @if (isProduct)
+    {
+        <div class="mb-5">
+            <h5 class="mb-3">📦 Khu vực Sản phẩm</h5>
+            <div class="row g-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-success">📦</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Tổng sản phẩm</p>
+                            <h6 class="mb-0">@Model.TotalProducts</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-success">🏷️</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Tổng danh mục</p>
+                            <h6 class="mb-0">@Model.TotalCategories</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-2">
+                <div class="col-12">
+                    <div class="bg-light rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">⚠️ Sản phẩm sắp hết hàng</h6>
+                            <a asp-page="/Product/Index">Xem tất cả</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                <thead>
+                                    <tr class="text-dark">
+                                        <th>Mã SP</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Tồn kho</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var product in Model.LowStockProducts)
+                                    {
+                                        <tr>
+                                            <td>@product.Code</td>
+                                            <td>@product.Name</td>
+                                            <td>
+                                                <span class="badge @(product.Quantity == 0 ? "bg-danger" : "bg-warning text-dark")">@product.Quantity</span>
+                                            </td>
+                                            <td>
+                                                <a asp-page="/ImportOrder/Create" class="btn btn-sm btn-outline-primary">Nhập hàng</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @* ==================== WAREHOUSE ==================== *@
+    @if (isWarehouse)
+    {
+        <div class="mb-5">
+            <h5 class="mb-3">🏭 Khu vực Kho hàng</h5>
+            <div class="row g-4">
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-warning">🚛</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Nhà cung cấp</p>
+                            <h6 class="mb-0">@Model.TotalSuppliers</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-3">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-warning">📥</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Đơn nhập hôm nay</p>
+                            <h6 class="mb-0">@Model.TodayImports</h6>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-xl-4">
+                    <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                        <span class="fs-1 text-warning">💰</span>
+                        <div class="ms-3">
+                            <p class="mb-2">Tổng chi nhập hàng</p>
+                            <h6 class="mb-0">@String.Format("{0:N0}", Model.TotalImportsAmount) ₫</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4 mt-2">
+                <div class="col-12">
+                    <div class="bg-light rounded p-4">
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <h6 class="mb-0">📋 Đơn nhập kho gần đây</h6>
+                            <a asp-page="/ImportOrder/Index">Xem tất cả</a>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table text-start align-middle table-bordered table-hover mb-0">
+                                <thead>
+                                    <tr class="text-dark">
+                                        <th>Mã đơn nhập</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Tổng tiền</th>
+                                        <th>NCC</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var import in Model.RecentImports)
+                                    {
+                                        <tr>
+                                            <td>@import.Code</td>
+                                            <td>@import.ImportDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td>@String.Format("{0:N0}", import.TotalCost) ₫</td>
+                                            <td>@import.Supplier?.CompanyName</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

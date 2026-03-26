@@ -1,0 +1,26 @@
+@page
+@namespace Razor.Pages.Users
+@model Razor.Pages.Users.CreateModel
+@{  ViewData["Title"] = "Thêm người dùng"; }
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4" style="max-width:600px;">
+        <h6 class="mb-4">Thêm người dùng mới</h6>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3"><label asp-for="Input.FullName" class="form-label"></label><input asp-for="Input.FullName" class="form-control" /><span asp-validation-for="Input.FullName" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Input.Email" class="form-label"></label><input asp-for="Input.Email" class="form-control" /><span asp-validation-for="Input.Email" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Input.Password" class="form-label"></label><input asp-for="Input.Password" type="password" class="form-control" /><span asp-validation-for="Input.Password" class="text-danger"></span></div>
+            <div class="mb-3">
+                <label asp-for="Input.RoleId" class="form-label">Vai trò</label>
+                <select asp-for="Input.RoleId" class="form-select">
+                    <option value="0">Sales</option>
+                    <option value="1">ProductManager</option>
+                    <option value="2">Warehouse</option>
+                    <option value="3">Admin</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2"><button type="submit" class="btn btn-primary">💾 Lưu</button><a asp-page="/User/Index" class="btn btn-secondary">Hủy</a></div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

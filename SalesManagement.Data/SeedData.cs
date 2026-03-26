@@ -22,17 +22,24 @@ namespace SalesManagement.Data
                 throw new InvalidOperationException(
                     "Cannot connect to database. Please run 'dotnet ef database update' first.");
             }
-            
+
             // Seed in order of dependencies
             await SeedAccountsAsync(context);
             await SeedCategoriesAsync(context);
             await SeedSuppliersAsync(context);
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
+
             
             // Link products to suppliers after both are seeded
             await SeedProductSuppliersAsync(context);
             
+
+
+            // Link products to suppliers after both are seeded
+            await SeedProductSuppliersAsync(context);
+
+
             // Save all changes
             await context.SaveChangesAsync();
         }
@@ -77,7 +84,7 @@ namespace SalesManagement.Data
                 new Account
                 {
                     Email = "product@electronics.com",
-                    Password = "product123",
+Password = "product123",
                     FullName = "Product Manager",
                     Role = (int)AccountRole.ProductManager,
                     IsActive = true
@@ -135,7 +142,7 @@ namespace SalesManagement.Data
                 new Supplier
                 {
                     CompanyName = "Apple Vietnam",
-                    ContactPhone = "028-1234-5678",
+                    ContactPhone = "0281234567",
                     Email = "supply@apple.vn",
                     Address = "Tòa nhà Bitexco, Q.1, TP.HCM",
                     Status = true
@@ -143,15 +150,15 @@ namespace SalesManagement.Data
                 new Supplier
                 {
                     CompanyName = "Samsung Electronics Vietnam",
-                    ContactPhone = "028-2345-6789",
+                    ContactPhone = "0282345678",
                     Email = "supply@samsung.vn",
                     Address = "KCN Thái Nguyên, Thái Nguyên",
                     Status = true
                 },
-                new Supplier
+new Supplier
                 {
                     CompanyName = "Sony Vietnam",
-                    ContactPhone = "028-3456-7890",
+                    ContactPhone = "0283456789",
                     Email = "supply@sony.vn",
                     Address = "Q.7, TP.HCM",
                     Status = true
@@ -159,7 +166,7 @@ namespace SalesManagement.Data
                 new Supplier
                 {
                     CompanyName = "Xiaomi Vietnam",
-                    ContactPhone = "028-4567-8901",
+                    ContactPhone = "0284567890",
                     Email = "supply@xiaomi.vn",
                     Address = "Q.2, TP.HCM",
                     Status = true
@@ -167,7 +174,7 @@ namespace SalesManagement.Data
                 new Supplier
                 {
                     CompanyName = "Dell Vietnam",
-                    ContactPhone = "028-5678-9012",
+                    ContactPhone = "0285678901",
                     Email = "supply@dell.vn",
                     Address = "Q.Bình Thạnh, TP.HCM",
                     Status = true
@@ -299,7 +306,7 @@ namespace SalesManagement.Data
                         Code = "XI14U",
                         Price = 23990000,
                         Quantity = 35,
-                        ImageUrl = "/images/products/xiaomi14ultra.jpg",
+ImageUrl = "/images/products/xiaomi14ultra.jpg",
                         Description = "Xiaomi 14 Ultra 512GB - Black",
                         CategoryId = smartphoneCategory.Id,
                         Status = true
@@ -372,7 +379,7 @@ namespace SalesManagement.Data
                         Quantity = 45,
                         ImageUrl = "/images/products/ipadair5.jpg",
                         Description = "iPad Air 5 M1 chip 64GB WiFi - Space Gray",
-                        CategoryId = tabletCategory.Id,
+CategoryId = tabletCategory.Id,
                         Status = true
                     },
                     new Product
@@ -448,7 +455,7 @@ namespace SalesManagement.Data
                     },
                     new Product
                     {
-                        Name = "Apple Watch Series 9",
+Name = "Apple Watch Series 9",
                         Code = "AWS9",
                         Price = 10990000,
                         Quantity = 50,
@@ -586,7 +593,7 @@ namespace SalesManagement.Data
             context.Suppliers.RemoveRange(context.Suppliers);
             context.Categories.RemoveRange(context.Categories);
             context.Accounts.RemoveRange(context.Accounts);
-            
+
             await context.SaveChangesAsync();
 
             // Reset identity seeds if using SQL Server
@@ -612,7 +619,9 @@ namespace SalesManagement.Data
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
             await SeedProductSuppliersAsync(context);
-            
+
+
+
             await context.SaveChangesAsync();
         }
         #endregion
