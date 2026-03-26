@@ -7,5 +7,6 @@ namespace SalesManagement.Service.Interfaces
         Task<IEnumerable<Order>> GetAllOrdersAsync();
         Task<bool> CreateOrderAsync(Order order, List<OrderDetail> details);
         Task<Order?> GetOrderByIdAsync(int id);
+        Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus);
     }
 }
