@@ -1,0 +1,92 @@
+@model SalesManagement.Data.Entities.Product
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4 justify-content-center">
+        <div class="col-sm-12 col-xl-8">
+            <div class="bg-light rounded h-100 p-4">
+                <h6 class="mb-4">Thông tin sản phẩm</h6>
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Name" class="form-label">Tên sản phẩm <span class="text-danger">*</span></label>
+                            <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Code" class="form-label">Mã sản phẩm <span class="text-danger">*</span></label>
+                            <input asp-for="Code" class="form-control" placeholder="Ví dụ: SP001">
+                            <span asp-validation-for="Code" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Price" class="form-label">Giá bán <span class="text-danger">*</span></label>
+                            <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00">
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Quantity" class="form-label">Số lượng <span class="text-danger">*</span></label>
+                            <input asp-for="Quantity" type="number" class="form-control" placeholder="0">
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="CategoryId" class="form-label">Danh mục <span class="text-danger">*</span></label>
+                        <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Hình ảnh sản phẩm</label>
+                        <input type="file" name="imageFile" class="form-control" accept="image/*" onchange="previewImage(this)">
+                        <div class="mt-2">
+                            <img id="imgPreview" src="#" alt="Preview" style="max-width: 200px; display: none;" class="img-thumbnail" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Mô tả sản phẩm</label>
+                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nhập mô tả chi tiết"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <input asp-for="Status" class="form-check-input" type="checkbox" checked>
+                        <label class="form-check-label" asp-for="Status">Đang kinh doanh</label>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-secondary mt-3"><i class="fa fa-arrow-left me-2"></i>Quay lại</a>
+                        <button type="submit" class="btn btn-primary mt-3"><i class="fa fa-save me-2"></i>Lưu sản phẩm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#imgPreview').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

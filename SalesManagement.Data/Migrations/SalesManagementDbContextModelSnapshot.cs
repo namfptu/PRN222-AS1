@@ -351,6 +351,21 @@ namespace SalesManagement.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("SalesManagement.Data.Entities.ProductSupplier", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "SupplierId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("ProductSuppliers");
+                });
+
             modelBuilder.Entity("SalesManagement.Data.Entities.Supplier", b =>
                 {
                     b.Property<int>("Id")
@@ -370,8 +385,8 @@ namespace SalesManagement.Data.Migrations
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
@@ -486,6 +501,25 @@ namespace SalesManagement.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("SalesManagement.Data.Entities.ProductSupplier", b =>
+                {
+                    b.HasOne("SalesManagement.Data.Entities.Product", "Product")
+                        .WithMany("ProductSuppliers")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SalesManagement.Data.Entities.Supplier", "Supplier")
+                        .WithMany("ProductSuppliers")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("SalesManagement.Data.Entities.Account", b =>
                 {
                     b.Navigation("CreatedImportOrders");
@@ -518,11 +552,15 @@ namespace SalesManagement.Data.Migrations
                     b.Navigation("ImportOrderDetails");
 
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductSuppliers");
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Supplier", b =>
                 {
                     b.Navigation("ImportOrders");
+
+                    b.Navigation("ProductSuppliers");
                 });
 #pragma warning restore 612, 618
         }

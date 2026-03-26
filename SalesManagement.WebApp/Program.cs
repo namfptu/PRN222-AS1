@@ -36,6 +36,8 @@ namespace SalesManagement.WebApp
 
             // Register Repositories
             builder.Services.AddScoped<SalesManagement.Repo.Interfaces.IAccountRepository, SalesManagement.Repo.Implementations.AccountRepository>();
+            builder.Services.AddScoped<SalesManagement.Repo.Interfaces.ICategoryRepository, SalesManagement.Repo.Implementations.CategoryRepository>();
+            builder.Services.AddScoped<SalesManagement.Repo.Interfaces.IProductRepository, SalesManagement.Repo.Implementations.ProductRepository>();
             builder.Services.AddScoped(typeof(SalesManagement.Repo.Interfaces.IGenericRepository<>), typeof(SalesManagement.Repo.Implementations.GenericRepository<>)); // BỔ SUNG đăng ký GenericRepository
             // Register Services
             builder.Services.AddScoped<SalesManagement.Service.Interfaces.IAccountService, SalesManagement.Service.Implementations.AccountService>();
@@ -44,6 +46,8 @@ namespace SalesManagement.WebApp
             builder.Services.AddScoped<ISupplierService, SupplierService>();
             builder.Services.AddScoped<IImportOrderService, ImportOrderService>();
             builder.Services.AddScoped<IReportService, ReportService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
 
             var app = builder.Build();
 
