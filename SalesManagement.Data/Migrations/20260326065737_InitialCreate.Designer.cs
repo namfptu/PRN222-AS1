@@ -12,7 +12,7 @@ using SalesManagement.Data;
 namespace SalesManagement.Data.Migrations
 {
     [DbContext(typeof(SalesManagementDbContext))]
-    [Migration("20260121141002_InitialCreate")]
+    [Migration("20260326065737_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -60,6 +60,34 @@ namespace SalesManagement.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("SalesManagement.Data.Entities.AccountProfile", b =>
+                {
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Avatar")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("JoinDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("AccountId");
+
+                    b.ToTable("AccountProfiles");
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Category", b =>
@@ -326,6 +354,21 @@ namespace SalesManagement.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("SalesManagement.Data.Entities.ProductSupplier", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SupplierId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductId", "SupplierId");
+
+                    b.HasIndex("SupplierId");
+
+                    b.ToTable("ProductSuppliers");
+                });
+
             modelBuilder.Entity("SalesManagement.Data.Entities.Supplier", b =>
                 {
                     b.Property<int>("Id")
@@ -345,8 +388,8 @@ namespace SalesManagement.Data.Migrations
 
                     b.Property<string>("ContactPhone")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(100)
@@ -358,6 +401,17 @@ namespace SalesManagement.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("SalesManagement.Data.Entities.AccountProfile", b =>
+                {
+                    b.HasOne("SalesManagement.Data.Entities.Account", "Account")
+                        .WithOne("Profile")
+                        .HasForeignKey("SalesManagement.Data.Entities.AccountProfile", "AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.ImportOrder", b =>
@@ -392,7 +446,7 @@ namespace SalesManagement.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("SalesManagement.Data.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("ImportOrderDetails")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -450,9 +504,30 @@ namespace SalesManagement.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("SalesManagement.Data.Entities.ProductSupplier", b =>
+                {
+                    b.HasOne("SalesManagement.Data.Entities.Product", "Product")
+                        .WithMany("ProductSuppliers")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SalesManagement.Data.Entities.Supplier", "Supplier")
+                        .WithMany("ProductSuppliers")
+                        .HasForeignKey("SupplierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+
+                    b.Navigation("Supplier");
+                });
+
             modelBuilder.Entity("SalesManagement.Data.Entities.Account", b =>
                 {
                     b.Navigation("CreatedImportOrders");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Category", b =>
@@ -477,12 +552,18 @@ namespace SalesManagement.Data.Migrations
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Product", b =>
                 {
+                    b.Navigation("ImportOrderDetails");
+
                     b.Navigation("OrderDetails");
+
+                    b.Navigation("ProductSuppliers");
                 });
 
             modelBuilder.Entity("SalesManagement.Data.Entities.Supplier", b =>
                 {
                     b.Navigation("ImportOrders");
+
+                    b.Navigation("ProductSuppliers");
                 });
 #pragma warning restore 612, 618
         }
