@@ -3,10 +3,27 @@
 @{
     ViewData["Title"] = "Chi tiết Đơn hàng";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var isSales = User.IsInRole("Sales");
 }
 
 <div class="container-fluid px-4">
     <h1 class="mt-4">Chi tiết Đơn hàng</h1>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
     <div class="row mt-4">
         <div class="col-md-4">
@@ -48,6 +65,35 @@
                     <li class="list-group-item"><strong>Địa chỉ:</strong> @(string.IsNullOrWhiteSpace(Model.Customer?.Address) ? "Chưa cập nhật" : Model.Customer?.Address)</li>
                 </ul>
             </div>
+
+            @if (isSales && Model.Status == SalesManagement.Data.Entities.OrderStatus.Pending)
+            {
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-warning text-dark fw-bold">
+                        <i class="fas fa-tasks me-1"></i> Cập nhật trạng thái
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="UpdateStatus" method="post" class="d-inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="status" value="@SalesManagement.Data.Entities.OrderStatus.Done" />
+                            <input type="hidden" name="returnTo" value="Details" />
+                            <button type="submit" class="btn btn-success" onclick="return confirm('Xác nhận hoàn thành đơn hàng này?');">
+                                <i class="fas fa-check"></i> Hoàn thành
+                            </button>
+                        </form>
+                        <form asp-action="UpdateStatus" method="post" class="d-inline ms-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="id" value="@Model.Id" />
+                            <input type="hidden" name="status" value="@SalesManagement.Data.Entities.OrderStatus.Cancelled" />
+                            <input type="hidden" name="returnTo" value="Details" />
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?');">
+                                <i class="fas fa-times"></i> Hủy đơn
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
         </div>
 
         <div class="col-md-8">

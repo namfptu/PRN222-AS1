@@ -103,6 +103,31 @@ namespace SalesManagement.WebApp.Controllers
             return View(order);
         }
 
+        [HttpPost]
+        [Authorize(Roles = "Sales")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id, OrderStatus status, string? returnTo = null)
+        {
+            try
+            {
+                await _orderService.UpdateOrderStatusAsync(id, status);
+                TempData["SuccessMessage"] = status == OrderStatus.Done
+                    ? "Cập nhật đơn hàng sang Hoàn thành thành công!"
+                    : "Đã hủy đơn hàng thành công!";
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+            }
+
+            if (string.Equals(returnTo, "Details", StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToAction(nameof(Details), new { id });
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
         private async Task<CreateOrderViewModel> BuildCreateOrderViewModelAsync(CreateOrderViewModel? sourceModel = null)
         {
             var quantityLookup = sourceModel?.Items?

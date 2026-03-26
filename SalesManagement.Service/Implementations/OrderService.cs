@@ -123,5 +123,76 @@ namespace SalesManagement.Service.Implementations
                     .ThenInclude(d => d.Product)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
+
+        public async Task<bool> UpdateOrderStatusAsync(int orderId, OrderStatus newStatus)
+        {
+            if (newStatus != OrderStatus.Done && newStatus != OrderStatus.Cancelled)
+            {
+                throw new InvalidOperationException("Trạng thái cập nhật không hợp lệ.");
+            }
+
+            var order = await _orderRepository.GetQueryable()
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(d => d.Product)
+                .FirstOrDefaultAsync(o => o.Id == orderId);
+
+            if (order == null)
+            {
+                throw new InvalidOperationException("Không tìm thấy đơn hàng.");
+            }
+
+            if (order.Status != OrderStatus.Pending)
+            {
+                throw new InvalidOperationException("Chỉ đơn hàng Pending mới được cập nhật trạng thái.");
+            }
+
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                if (newStatus == OrderStatus.Done)
+                {
+                    foreach (var detail in order.OrderDetails)
+                    {
+                        var product = detail.Product ?? await _productRepository.GetByIdAsync(detail.ProductId);
+                        if (product == null || !product.Status)
+                        {
+                            throw new InvalidOperationException("Có sản phẩm trong đơn không còn hợp lệ.");
+                        }
+
+                        if (product.Quantity < detail.Quantity)
+                        {
+                            throw new InvalidOperationException($"Sản phẩm '{product.Name}' không đủ tồn kho để hoàn thành đơn.");
+                        }
+                    }
+
+                    foreach (var detail in order.OrderDetails)
+                    {
+                        var product = detail.Product ?? await _productRepository.GetByIdAsync(detail.ProductId);
+                        if (product == null)
+                        {
+                            throw new InvalidOperationException("Không tìm thấy sản phẩm trong đơn hàng.");
+                        }
+
+                        product.Quantity -= detail.Quantity;
+                        _productRepository.Update(product);
+                    }
+
+                    await _productRepository.SaveChangesAsync();
+                }
+
+                order.Status = newStatus;
+                _orderRepository.Update(order);
+                await _orderRepository.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
     }
 }
