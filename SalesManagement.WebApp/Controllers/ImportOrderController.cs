@@ -49,6 +49,7 @@ namespace SalesManagement.WebApp.Controllers
             {
                 var products = _productRepo.GetQueryable()
                     .Where(p => p.ProductSuppliers.Any(ps => ps.SupplierId == selectedSupplierId.Value))
+                    .Where(p => p.Status == true)
                     .Select(p => new { Id = p.Id, Name = p.Name })
                     .ToList();
 
