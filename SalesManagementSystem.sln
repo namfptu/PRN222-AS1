@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesManagement.WebApp", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesManagement.Service", "SalesManagement.Service\SalesManagement.Service.csproj", "{7F41115A-0CB2-4D91-83C6-A48C9B519395}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Razor", "Razor\Razor.csproj", "{D58B6013-3932-41E5-80EE-497BD837D0C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{7F41115A-0CB2-4D91-83C6-A48C9B519395}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F41115A-0CB2-4D91-83C6-A48C9B519395}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F41115A-0CB2-4D91-83C6-A48C9B519395}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D58B6013-3932-41E5-80EE-497BD837D0C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D58B6013-3932-41E5-80EE-497BD837D0C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D58B6013-3932-41E5-80EE-497BD837D0C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D58B6013-3932-41E5-80EE-497BD837D0C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

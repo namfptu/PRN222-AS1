@@ -1,0 +1,56 @@
+@page
+@namespace Razor.Pages.ImportOrders
+@model Razor.Pages.ImportOrders.CreateModel
+@{  ViewData["Title"] = "Tạo phiếu nhập kho"; }
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <h6 class="mb-4">Tạo phiếu nhập kho mới</h6>
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label asp-for="Input.SupplierId" class="form-label">Nhà cung cấp</label>
+                    <select asp-for="Input.SupplierId" asp-items="Model.SupplierList" class="form-select"
+                            onchange="this.form.submit()">
+                        <option value="">-- Chọn nhà cung cấp --</option>
+                    </select>
+                    <span asp-validation-for="Input.SupplierId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Input.Note" class="form-label"></label>
+                    <input asp-for="Input.Note" class="form-control" />
+                </div>
+            </div>
+
+            @if (Model.Input.SupplierId > 0)
+            {
+                <h6 class="mt-4 mb-3">Sản phẩm từ nhà cung cấp này</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr><th>Tên sản phẩm</th><th>Tồn kho</th><th>Số lượng nhập</th><th>Đơn giá nhập</th></tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Input.Details.Count; i++)
+                            {
+                                <input type="hidden" asp-for="Input.Details[i].ProductId" />
+                                <tr>
+                                    <td>@Model.ProductNames.GetValueOrDefault(Model.Input.Details[i].ProductId)</td>
+                                    <td>@Model.ProductStock.GetValueOrDefault(Model.Input.Details[i].ProductId)</td>
+                                    <td style="width:120px"><input asp-for="Input.Details[i].Quantity" type="number" min="0" class="form-control form-control-sm" /></td>
+                                    <td style="width:150px"><input asp-for="Input.Details[i].UnitCost" type="number" min="0" step="1000" class="form-control form-control-sm" /></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex gap-2 mt-3">
+                    <button type="submit" name="action" value="save" class="btn btn-primary">✅ Tạo phiếu nhập</button>
+                    <a asp-page="/ImportOrder/Index" class="btn btn-secondary">Hủy</a>
+                </div>
+            }
+        </form>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+@page "{id:int}"
+@namespace Razor.Pages.Customers
+@model Razor.Pages.Customers.EditModel
+@{  ViewData["Title"] = "Chỉnh sửa khách hàng"; }
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4" style="max-width:600px;">
+        <h6 class="mb-4">Chỉnh sửa khách hàng</h6>
+        <form method="post">
+            <input type="hidden" asp-for="Input.Id" />
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="mb-3"><label asp-for="Input.FullName" class="form-label"></label><input asp-for="Input.FullName" class="form-control" /><span asp-validation-for="Input.FullName" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Input.Phone" class="form-label"></label><input asp-for="Input.Phone" class="form-control" /><span asp-validation-for="Input.Phone" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Input.Email" class="form-label"></label><input asp-for="Input.Email" class="form-control" /></div>
+            <div class="mb-3"><label asp-for="Input.Address" class="form-label"></label><textarea asp-for="Input.Address" class="form-control" rows="2"></textarea></div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">💾 Lưu</button>
+                <a asp-page="/Customer/Index" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

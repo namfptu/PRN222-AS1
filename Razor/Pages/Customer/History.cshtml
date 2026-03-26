@@ -1,0 +1,44 @@
+@page
+@namespace Razor.Pages.Customers
+@model Razor.Pages.Customers.HistoryModel
+@{  ViewData["Title"] = "Lịch sử mua hàng"; }
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="mb-0">Lịch sử mua hàng: <strong>@Model.Data.Customer.FullName</strong></h6>
+            <a asp-page="/Customer/Index" class="btn btn-secondary btn-sm">← Quay lại</a>
+        </div>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card text-center p-3"><p class="mb-1 text-muted">Tổng đơn hàng</p><h5>@Model.Data.TotalOrders</h5></div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center p-3"><p class="mb-1 text-muted">Tổng chi tiêu</p><h5>@String.Format("{0:N0}", Model.Data.TotalSpent) ₫</h5></div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead><tr><th>Mã đơn</th><th>Ngày</th><th>Tổng tiền</th><th>Trạng thái</th><th>Ghi chú</th></tr></thead>
+                <tbody>
+                    @foreach (var o in Model.Data.Orders)
+                    {
+                        <tr>
+                            <td>@o.Code</td>
+                            <td>@o.CreatedDate.ToString("dd/MM/yyyy")</td>
+                            <td>@String.Format("{0:N0}", o.TotalAmount) ₫</td>
+                            <td>
+                                @switch (o.Status)
+                                {
+                                    case SalesManagement.Data.Entities.OrderStatus.Pending: <span class="badge bg-warning">Chờ xử lý</span> break;
+                                    case SalesManagement.Data.Entities.OrderStatus.Done: <span class="badge bg-success">Hoàn thành</span> break;
+                                    default: <span class="badge bg-danger">Đã hủy</span> break;
+                                }
+                            </td>
+                            <td>@o.Note</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

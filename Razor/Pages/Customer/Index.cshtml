@@ -1,0 +1,49 @@
+@page
+@namespace Razor.Pages.Customers
+@model Razor.Pages.Customers.IndexModel
+@{
+    ViewData["Title"] = "Quản lý Khách hàng";
+}
+<div class="container-fluid pt-4 px-4">
+    <div class="bg-light rounded p-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h6 class="mb-0">Danh sách khách hàng</h6>
+            @if (User.IsInRole("Sales"))
+            {
+                <a asp-page="/Customer/Create" class="btn btn-primary">+ Thêm mới</a>
+            }
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Họ tên</th><th>SĐT</th><th>Email</th><th>Địa chỉ</th><th>Trạng thái</th><th class="text-center">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var c in Model.Customers)
+                    {
+                        <tr>
+                            <td>@c.FullName</td>
+                            <td>@c.Phone</td>
+                            <td>@c.Email</td>
+                            <td>@c.Address</td>
+                            <td><span class="badge @(c.Status ? "bg-success" : "bg-danger")">@(c.Status ? "Hoạt động" : "Ngừng")</span></td>
+                            <td class="text-center">
+                                <a asp-page="/Customer/History" asp-route-id="@c.Id" class="btn btn-sm btn-info me-1">📋</a>
+                                @if (User.IsInRole("Sales"))
+                                {
+                                    <a asp-page="/Customer/Edit" asp-route-id="@c.Id" class="btn btn-sm btn-warning me-1">✏️</a>
+                                    <form method="post" asp-page-handler="Delete" asp-route-id="@c.Id" class="d-inline"
+                                          onsubmit="return confirm('Ngừng hoạt động khách hàng này?');">
+                                        <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

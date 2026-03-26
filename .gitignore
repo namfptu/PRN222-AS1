@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 SalesManagement.WebApp/appsettings.json
+# Razor Project specific
+Razor/wwwroot/images/products/*
+Razor/appsettings.Development.json

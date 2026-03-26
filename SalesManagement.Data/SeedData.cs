@@ -30,8 +30,15 @@ namespace SalesManagement.Data
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
 
+            
             // Link products to suppliers after both are seeded
             await SeedProductSuppliersAsync(context);
+            
+
+
+            // Link products to suppliers after both are seeded
+            await SeedProductSuppliersAsync(context);
+
 
             // Save all changes
             await context.SaveChangesAsync();
@@ -612,6 +619,8 @@ Name = "Apple Watch Series 9",
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
             await SeedProductSuppliersAsync(context);
+
+
 
             await context.SaveChangesAsync();
         }

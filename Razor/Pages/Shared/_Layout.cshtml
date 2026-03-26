@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Sales Management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Razor.styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-page="/Dashboard/Index">📊 Sales Management</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+
+                        @* Dashboard *@
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-page="/Dashboard/Index">Dashboard</a>
+                        </li>
+
+                        @* Sales: Sales + Admin *@
+                        @if (User.IsInRole("Sales") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">Sales</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Customer/Index">Customers</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Order/Index">Orders</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @* Products: ProductManager + Admin *@
+                        @if (User.IsInRole("ProductManager") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">Products</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Category/Index">Categories</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Product/Index">Products</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @* Warehouse: Warehouse + Admin *@
+                        @if (User.IsInRole("Warehouse") || User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">Warehouse</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/Supplier/Index">Suppliers</a></li>
+                                    <li><a class="dropdown-item" asp-page="/ImportOrder/Index">Import Orders</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                        @* Admin only *@
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">Admin</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" asp-page="/User/Index">Manage Users</a></li>
+                                    <li><a class="dropdown-item" asp-page="/Report/Index">Reports</a></li>
+                                </ul>
+                            </li>
+                        }
+
+                    </ul>
+
+                    @* Right: user info & logout *@
+                    <ul class="navbar-nav">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                    👤 @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" asp-page="/Auth/Profile">My Profile</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                    <li><a class="dropdown-item text-danger" asp-page="/Auth/Logout">Logout</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-page="/Auth/Login">Login</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        @* Toast Alerts from TempData *@
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        }
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2026 - Sales Management System
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

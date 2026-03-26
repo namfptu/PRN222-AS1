@@ -1,0 +1,32 @@
+@page "{id:int}"
+@namespace Razor.Pages.ImportOrders
+@model Razor.Pages.ImportOrders.DetailsModel
+@{  ViewData["Title"] = "Chi tiết phiếu nhập kho"; }
+<div class="container-fluid pt-4 px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5>Phiếu nhập: <strong>@Model.ImportOrder!.Code</strong></h5>
+        <a asp-page="/ImportOrder/Index" class="btn btn-secondary btn-sm">← Quay lại</a>
+    </div>
+    <dl class="row">
+        <dt class="col-sm-3">Nhà cung cấp</dt><dd class="col-sm-9">@Model.ImportOrder.Supplier?.CompanyName</dd>
+        <dt class="col-sm-3">Ngày nhập</dt><dd class="col-sm-9">@Model.ImportOrder.ImportDate.ToString("dd/MM/yyyy HH:mm")</dd>
+        <dt class="col-sm-3">Tổng tiền</dt><dd class="col-sm-9">@String.Format("{0:N0}", Model.ImportOrder.TotalCost) ₫</dd>
+        <dt class="col-sm-3">Ghi chú</dt><dd class="col-sm-9">@Model.ImportOrder.Note</dd>
+    </dl>
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered">
+            <thead class="table-light"><tr><th>Sản phẩm</th><th>Đơn giá nhập</th><th>Số lượng</th><th>Thành tiền</th></tr></thead>
+            <tbody>
+                @foreach (var d in Model.ImportOrder.ImportOrderDetails)
+                {
+                    <tr>
+                        <td>@d.Product?.Name</td>
+                        <td>@String.Format("{0:N0}", d.UnitCost) ₫</td>
+                        <td>@d.Quantity</td>
+                        <td>@String.Format("{0:N0}", d.UnitCost * d.Quantity) ₫</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
