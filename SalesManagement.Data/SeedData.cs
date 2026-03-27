@@ -84,7 +84,7 @@ namespace SalesManagement.Data
                 new Account
                 {
                     Email = "product@electronics.com",
-Password = "product123",
+                    Password = "product123",
                     FullName = "Product Manager",
                     Role = (int)AccountRole.ProductManager,
                     IsActive = true

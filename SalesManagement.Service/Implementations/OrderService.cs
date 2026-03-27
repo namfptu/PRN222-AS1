@@ -41,18 +41,18 @@ namespace SalesManagement.Service.Implementations
         {
             if (details == null || !details.Any())
             {
-                throw new InvalidOperationException("Vui lòng chọn ít nhất 1 sản phẩm.");
+                throw new InvalidOperationException("Vui long chon it nhat 1 san pham.");
             }
 
             if (!order.CustomerId.HasValue)
             {
-                throw new InvalidOperationException("Vui lòng chọn khách hàng.");
+                throw new InvalidOperationException("Vui long chon khach hang.");
             }
 
             var customer = await _customerRepository.GetByIdAsync(order.CustomerId.Value);
             if (customer == null || !customer.Status)
             {
-                throw new InvalidOperationException("Khách hàng không hợp lệ.");
+                throw new InvalidOperationException("Khach hang khong hop le.");
             }
 
             var productIds = details.Select(d => d.ProductId).Distinct().ToList();
@@ -62,7 +62,7 @@ namespace SalesManagement.Service.Implementations
 
             if (products.Count != productIds.Count)
             {
-                throw new InvalidOperationException("Có sản phẩm không còn tồn tại hoặc đã ngừng bán.");
+                throw new InvalidOperationException("Co san pham khong con ton tai hoac da ngung ban.");
             }
 
             foreach (var detail in details)
@@ -71,12 +71,12 @@ namespace SalesManagement.Service.Implementations
 
                 if (detail.Quantity <= 0)
                 {
-                    throw new InvalidOperationException($"Số lượng của sản phẩm '{product.Name}' không hợp lệ.");
+                    throw new InvalidOperationException($"So luong cua san pham '{product.Name}' khong hop le.");
                 }
 
                 if (detail.Quantity > product.Quantity)
                 {
-                    throw new InvalidOperationException($"Sản phẩm '{product.Name}' không đủ tồn kho.");
+                    throw new InvalidOperationException($"San pham '{product.Name}' khong du ton kho.");
                 }
 
                 detail.UnitPrice = product.Price;
@@ -93,6 +93,16 @@ namespace SalesManagement.Service.Implementations
 
             try
             {
+                // Deduct inventory immediately when the order is created in Pending state.
+                foreach (var detail in details)
+                {
+                    var product = products.First(p => p.Id == detail.ProductId);
+                    product.Quantity -= detail.Quantity;
+                    _productRepository.Update(product);
+                }
+
+                await _productRepository.SaveChangesAsync();
+
                 await _orderRepository.AddAsync(order);
                 await _orderRepository.SaveChangesAsync();
 
@@ -128,7 +138,7 @@ namespace SalesManagement.Service.Implementations
         {
             if (newStatus != OrderStatus.Done && newStatus != OrderStatus.Cancelled)
             {
-                throw new InvalidOperationException("Trạng thái cập nhật không hợp lệ.");
+                throw new InvalidOperationException("Trang thai cap nhat khong hop le.");
             }
 
             var order = await _orderRepository.GetQueryable()
@@ -138,43 +148,29 @@ namespace SalesManagement.Service.Implementations
 
             if (order == null)
             {
-                throw new InvalidOperationException("Không tìm thấy đơn hàng.");
+                throw new InvalidOperationException("Khong tim thay don hang.");
             }
 
             if (order.Status != OrderStatus.Pending)
             {
-                throw new InvalidOperationException("Chỉ đơn hàng Pending mới được cập nhật trạng thái.");
+                throw new InvalidOperationException("Chi don hang Pending moi duoc cap nhat trang thai.");
             }
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                if (newStatus == OrderStatus.Done)
+                if (newStatus == OrderStatus.Cancelled)
                 {
-                    foreach (var detail in order.OrderDetails)
-                    {
-                        var product = detail.Product ?? await _productRepository.GetByIdAsync(detail.ProductId);
-                        if (product == null || !product.Status)
-                        {
-                            throw new InvalidOperationException("Có sản phẩm trong đơn không còn hợp lệ.");
-                        }
-
-                        if (product.Quantity < detail.Quantity)
-                        {
-                            throw new InvalidOperationException($"Sản phẩm '{product.Name}' không đủ tồn kho để hoàn thành đơn.");
-                        }
-                    }
-
                     foreach (var detail in order.OrderDetails)
                     {
                         var product = detail.Product ?? await _productRepository.GetByIdAsync(detail.ProductId);
                         if (product == null)
                         {
-                            throw new InvalidOperationException("Không tìm thấy sản phẩm trong đơn hàng.");
+                            throw new InvalidOperationException("Khong tim thay san pham trong don hang.");
                         }
 
-                        product.Quantity -= detail.Quantity;
+                        product.Quantity += detail.Quantity;
                         _productRepository.Update(product);
                     }
 
