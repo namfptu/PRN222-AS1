@@ -6,5 +6,6 @@ namespace SalesManagement.Repo.Interfaces
     {
         Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId);
         Task<Product?> GetWithCategoryByIdAsync(int id);
+        Task<IEnumerable<Product>> GetAllWithDetailsAsync();
     }
 }
