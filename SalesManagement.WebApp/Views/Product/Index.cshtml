@@ -41,6 +41,7 @@
                                 <th scope="col">Danh mục</th>
                                 <th scope="col">Giá</th>
                                 <th scope="col">Số lượng</th>
+                                <th scope="col">Lần nhập hàng</th>
                                 <th scope="col">Trạng thái</th>
                                 <th scope="col" class="text-center">Thao tác</th>
                             </tr>
@@ -67,6 +68,25 @@
                                         <td>@item.Price.ToString("N0") VNĐ</td>
                                         <td>@item.Quantity</td>
                                         <td>
+                                            @{
+                                                var latestImport = item.ImportOrderDetails?.Where(iod => iod.ImportOrder != null)
+                                                                    .OrderByDescending(iod => iod.ImportOrder.ImportDate)
+                                                                    .FirstOrDefault();
+                                            }
+                                            @if (latestImport != null)
+                                            {
+                                                <div class="small">
+                                                    <div class="fw-bold text-dark">@latestImport.ImportOrder.ImportDate.ToString("dd/MM/yyyy HH:mm")</div>
+                                                    <div class="text-muted">SL: @latestImport.Quantity</div>
+                                                    <div class="text-muted">Giá: @latestImport.UnitCost.ToString("N0") VNĐ</div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">Chưa nhập</span>
+                                            }
+                                        </td>
+                                        <td>
                                             @if (item.Status)
                                             {
                                                 <span class="badge bg-success">Đang bán</span>
@@ -77,8 +97,12 @@
                                             }
                                         </td>
                                         <td class="text-center">
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-2"><i class="fa fa-edit"></i></a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa/ngưng bán sản phẩm này?');"><i class="fa fa-trash"></i></a>
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-2" title="Chỉnh sửa"><i class="fa fa-edit"></i></a>
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger" 
+                                               title="Xóa vĩnh viễn"
+                                               onclick="return confirm('Hệ thống sẽ kiểm tra đơn hàng trước khi xóa. Bạn có chắc muốn xóa vĩnh viễn sản phẩm này?');">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                 }
@@ -86,7 +110,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="8" class="text-center">Không có dữ liệu hiển thị.</td>
+                                    <td colspan="9" class="text-center">Không có dữ liệu hiển thị.</td>
                                 </tr>
                             }
                         </tbody>

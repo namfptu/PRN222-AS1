@@ -12,22 +12,25 @@ namespace SalesManagement.WebApp.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
+        private readonly ISupplierService _supplierService;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
         public ProductController(
             IProductService productService, 
             ICategoryService categoryService,
+            ISupplierService supplierService,
             IWebHostEnvironment webHostEnvironment)
         {
             _productService = productService;
             _categoryService = categoryService;
+            _supplierService = supplierService;
             _webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Product
         public async Task<IActionResult> Index(int? pageNumber)
         {
-            var products = await _productService.GetAllProductsAsync();
+            var products = await _productService.GetAllProductsWithDetailsAsync();
             int pageSize = 10;
             var paginated = PaginatedList<Product>.Create(products, pageNumber ?? 1, pageSize);
             return View(paginated);
@@ -38,13 +41,15 @@ namespace SalesManagement.WebApp.Controllers
         {
             var categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Categories = new SelectList(categories.Where(c => c.Status), "Id", "Name");
+            var suppliers = await _supplierService.GetActiveSuppliersAsync();
+            ViewBag.Suppliers = new SelectList(suppliers, "Id", "CompanyName");
             return View();
         }
 
         // POST: Product/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product, IFormFile? imageFile)
+        public async Task<IActionResult> Create(Product product, IFormFile? imageFile, int? supplierId)
         {
             if (await _productService.CodeExistsAsync(product.Code))
             {
@@ -58,13 +63,21 @@ namespace SalesManagement.WebApp.Controllers
                     product.ImageUrl = await SaveImage(imageFile);
                 }
 
-                await _productService.CreateProductAsync(product);
+                var created = await _productService.CreateProductAsync(product);
+
+                if (supplierId.HasValue)
+                {
+                    await _productService.AddProductSupplierAsync(created.Id, supplierId.Value);
+                }
+
                 TempData["SuccessMessage"] = "Thêm sản phẩm mới thành công!";
                 return RedirectToAction(nameof(Index));
             }
 
             var categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Categories = new SelectList(categories.Where(c => c.Status), "Id", "Name", product.CategoryId);
+            var suppliers = await _supplierService.GetActiveSuppliersAsync();
+            ViewBag.Suppliers = new SelectList(suppliers, "Id", "CompanyName", supplierId);
             return View(product);
         }
 
@@ -79,13 +92,18 @@ namespace SalesManagement.WebApp.Controllers
 
             var categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Categories = new SelectList(categories.Where(c => c.Status), "Id", "Name", product.CategoryId);
+            
+            var suppliers = await _supplierService.GetActiveSuppliersAsync();
+            var currentSupplierId = product.ProductSuppliers.FirstOrDefault()?.SupplierId;
+            ViewBag.Suppliers = new SelectList(suppliers, "Id", "CompanyName", currentSupplierId);
+            
             return View(product);
         }
 
         // POST: Product/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product, IFormFile? imageFile)
+        public async Task<IActionResult> Edit(int id, Product product, IFormFile? imageFile, int? supplierId)
         {
             if (id != product.Id)
             {
@@ -99,23 +117,42 @@ namespace SalesManagement.WebApp.Controllers
 
             if (ModelState.IsValid)
             {
+                var existingProduct = await _productService.GetProductByIdAsync(id);
+                if (existingProduct == null) return NotFound();
+
+                // Map updated values from form to the existing tracked entity
+                existingProduct.Name = product.Name;
+                existingProduct.Code = product.Code;
+                existingProduct.Price = product.Price;
+                existingProduct.Description = product.Description;
+                existingProduct.CategoryId = product.CategoryId;
+                existingProduct.Status = product.Status;
+
                 if (imageFile != null)
                 {
                     // Delete old image if it exists
-                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    if (!string.IsNullOrEmpty(existingProduct.ImageUrl))
                     {
-                        DeleteOldImage(product.ImageUrl);
+                        DeleteOldImage(existingProduct.ImageUrl);
                     }
-                    product.ImageUrl = await SaveImage(imageFile);
+                    existingProduct.ImageUrl = await SaveImage(imageFile);
                 }
 
-                await _productService.UpdateProductAsync(product);
+                await _productService.UpdateProductAsync(existingProduct);
+
+                if (supplierId.HasValue)
+                {
+                    await _productService.UpdateProductSuppliersAsync(existingProduct.Id, supplierId.Value);
+                }
+
                 TempData["SuccessMessage"] = "Cập nhật sản phẩm thành công!";
                 return RedirectToAction(nameof(Index));
             }
 
             var categories = await _categoryService.GetAllCategoriesAsync();
             ViewBag.Categories = new SelectList(categories.Where(c => c.Status), "Id", "Name", product.CategoryId);
+            var suppliers = await _supplierService.GetActiveSuppliersAsync();
+            ViewBag.Suppliers = new SelectList(suppliers, "Id", "CompanyName", supplierId);
             return View(product);
         }
 
@@ -125,7 +162,22 @@ namespace SalesManagement.WebApp.Controllers
             var result = await _productService.DeleteProductAsync(id);
             if (result)
             {
-                TempData["SuccessMessage"] = "Đã cập nhật trạng thái hoặc xóa sản phẩm thành công!";
+                TempData["SuccessMessage"] = "Xóa sản phẩm thành công!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Không thể xóa do sản phẩm này đã có đơn bán hoặc đơn nhập hàng!";
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Product/ToggleStatus/5
+        public async Task<IActionResult> ToggleStatus(int id)
+        {
+            var result = await _productService.ToggleStatusAsync(id);
+            if (result)
+            {
+                TempData["SuccessMessage"] = "Cập nhật trạng thái sản phẩm thành công!";
             }
             else
             {

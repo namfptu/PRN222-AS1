@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SalesManagement.Data;
 using SalesManagement.Data.Entities;
 using SalesManagement.Repo.Interfaces;
 using SalesManagement.Service.Interfaces;
@@ -8,10 +9,12 @@ namespace SalesManagement.Service.Implementations
     public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
+        private readonly SalesManagementDbContext _context;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(IProductRepository productRepository, SalesManagementDbContext context)
         {
             _productRepository = productRepository;
+            _context = context;
         }
 
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
@@ -20,6 +23,11 @@ namespace SalesManagement.Service.Implementations
             return await _productRepository.GetQueryable()
                 .Include(p => p.Category)
                 .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Product>> GetAllProductsWithDetailsAsync()
+        {
+            return await _productRepository.GetAllWithDetailsAsync();
         }
 
         public async Task<Product?> GetProductByIdAsync(int id)
@@ -49,17 +57,24 @@ namespace SalesManagement.Service.Implementations
 
             if (product == null) return false;
 
-            // Logic check: "Không xóa sản phẩm đã có đơn hàng -> Chuyển trạng thái ngưng bán"
+            // Chặn xóa nếu đã có đơn bán hoặc đơn nhập
             if (product.OrderDetails.Any() || product.ImportOrderDetails.Any())
             {
-                product.Status = false; // Discontinued
-                _productRepository.Update(product);
-            }
-            else
-            {
-                _productRepository.Delete(product);
+                return false; // Trạng thái không đổi
             }
 
+            _productRepository.Delete(product);
+            await _productRepository.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> ToggleStatusAsync(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null) return false;
+
+            product.Status = !product.Status;
+            _productRepository.Update(product);
             await _productRepository.SaveChangesAsync();
             return true;
         }
@@ -77,6 +92,34 @@ namespace SalesManagement.Service.Implementations
                 query = query.Where(p => p.Id != excludeId.Value);
             }
             return await query.AnyAsync();
+        }
+
+        public async Task AddProductSupplierAsync(int productId, int supplierId)
+        {
+            var exists = await _context.Set<ProductSupplier>()
+                .AnyAsync(ps => ps.ProductId == productId && ps.SupplierId == supplierId);
+            if (!exists)
+            {
+                _context.Set<ProductSupplier>().Add(new ProductSupplier
+                {
+                    ProductId = productId,
+                    SupplierId = supplierId
+                });
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdateProductSuppliersAsync(int productId, int supplierId)
+        {
+            var existingItems = _context.Set<ProductSupplier>().Where(ps => ps.ProductId == productId);
+            _context.Set<ProductSupplier>().RemoveRange(existingItems);
+            
+            _context.Set<ProductSupplier>().Add(new ProductSupplier
+            {
+                ProductId = productId,
+                SupplierId = supplierId
+            });
+            await _context.SaveChangesAsync();
         }
     }
 }
