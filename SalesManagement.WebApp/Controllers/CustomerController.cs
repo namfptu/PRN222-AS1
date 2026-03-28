@@ -66,7 +66,11 @@ namespace SalesManagement.WebApp.Controllers
             NormalizeCustomer(customer);
             // Day la diem them khach hang, kiem tra trung so dien thoai va email truoc khi luu.
 
-            if (await _customerService.PhoneExistsAsync(customer.Phone))
+            if (!HasValidPhone(customer.Phone))
+            {
+                ModelState.AddModelError("Phone", "So dien thoai phai gom dung 10 chu so.");
+            }
+            else if (await _customerService.PhoneExistsAsync(customer.Phone))
             {
                 ModelState.AddModelError("Phone", "So dien thoai nay da ton tai.");
             }
@@ -113,7 +117,11 @@ namespace SalesManagement.WebApp.Controllers
             NormalizeCustomer(customer);
             // Day la diem sua khach hang, van giu rule trung so dien thoai va email nhung bo qua chinh ban ghi hien tai.
 
-            if (await _customerService.PhoneExistsAsync(customer.Phone, customer.Id))
+            if (!HasValidPhone(customer.Phone))
+            {
+                ModelState.AddModelError("Phone", "So dien thoai phai gom dung 10 chu so.");
+            }
+            else if (await _customerService.PhoneExistsAsync(customer.Phone, customer.Id))
             {
                 ModelState.AddModelError("Phone", "So dien thoai nay da ton tai.");
             }
@@ -169,6 +177,11 @@ namespace SalesManagement.WebApp.Controllers
             customer.Phone = customer.Phone?.Trim() ?? string.Empty;
             customer.Email = string.IsNullOrWhiteSpace(customer.Email) ? null : customer.Email.Trim();
             customer.Address = string.IsNullOrWhiteSpace(customer.Address) ? null : customer.Address.Trim();
+        }
+
+        private static bool HasValidPhone(string phone)
+        {
+            return phone.Length == 10 && phone.All(char.IsDigit);
         }
     }
 }
