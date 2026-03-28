@@ -79,6 +79,7 @@ namespace SalesManagement.Service.Implementations
                     throw new InvalidOperationException($"San pham '{product.Name}' khong du ton kho.");
                 }
 
+                // Luon lay don gia tu server de khong bi sua tong tien tu phia client.
                 detail.UnitPrice = product.Price;
             }
 
@@ -86,6 +87,7 @@ namespace SalesManagement.Service.Implementations
             order.CreatedDate = DateTime.Now;
             order.Status = OrderStatus.Pending;
             order.TotalAmount = details.Sum(d => d.UnitPrice * d.Quantity);
+            // Luu snapshot thong tin khach ngay tren order de hoa don cu van dung du lieu tai thoi diem ban.
             order.CustomerName = customer.FullName;
             order.CustomerPhone = customer.Phone;
 
@@ -93,7 +95,7 @@ namespace SalesManagement.Service.Implementations
 
             try
             {
-                // Deduct inventory immediately when the order is created in Pending state.
+                // Theo luong Sales hien tai, vua tao Pending la tru kho ngay.
                 foreach (var detail in details)
                 {
                     var product = products.First(p => p.Id == detail.ProductId);
@@ -162,6 +164,7 @@ namespace SalesManagement.Service.Implementations
             {
                 if (newStatus == OrderStatus.Cancelled)
                 {
+                    // Neu huy don thi cong tra lai kho vi so luong da bi tru ngay luc tao Pending.
                     foreach (var detail in order.OrderDetails)
                     {
                         var product = detail.Product ?? await _productRepository.GetByIdAsync(detail.ProductId);
@@ -177,6 +180,7 @@ namespace SalesManagement.Service.Implementations
                     await _productRepository.SaveChangesAsync();
                 }
 
+                // Done luc nay chi co y nghia chot trang thai vi kho da xu ly tu luc tao don.
                 order.Status = newStatus;
                 _orderRepository.Update(order);
                 await _orderRepository.SaveChangesAsync();

@@ -31,6 +31,7 @@ namespace SalesManagement.WebApp.Controllers
             }
 
             var orders = (await _customerService.GetCustomerPurchaseHistoryAsync(id)).ToList();
+            // Sales chi can xem lich su mua hang o muc don hang de tra cuu nhanh.
             var model = new CustomerPurchaseHistoryViewModel
             {
                 Customer = customer,
@@ -50,6 +51,7 @@ namespace SalesManagement.WebApp.Controllers
             return View(model);
         }
 
+        // Sales mo form them khach hang moi.
         [Authorize(Roles = "Sales")]
         public IActionResult Create()
         {
@@ -62,22 +64,30 @@ namespace SalesManagement.WebApp.Controllers
         public async Task<IActionResult> Create(Customer customer)
         {
             NormalizeCustomer(customer);
+            // Day la diem them khach hang, kiem tra trung so dien thoai va email truoc khi luu.
 
             if (await _customerService.PhoneExistsAsync(customer.Phone))
             {
-                ModelState.AddModelError("Phone", "Số điện thoại này đã tồn tại.");
+                ModelState.AddModelError("Phone", "So dien thoai nay da ton tai.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(customer.Email)
+                && await _customerService.EmailExistsAsync(customer.Email))
+            {
+                ModelState.AddModelError("Email", "Email nay da ton tai.");
             }
 
             if (ModelState.IsValid)
             {
                 await _customerService.CreateCustomerAsync(customer);
-                TempData["SuccessMessage"] = "Thêm khách hàng thành công!";
+                TempData["SuccessMessage"] = "Them khach hang thanh cong!";
                 return RedirectToAction(nameof(Index));
             }
 
             return View(customer);
         }
 
+        // Sales mo form sua thong tin khach hang dang hoat dong.
         [Authorize(Roles = "Sales")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -101,10 +111,17 @@ namespace SalesManagement.WebApp.Controllers
             }
 
             NormalizeCustomer(customer);
+            // Day la diem sua khach hang, van giu rule trung so dien thoai va email nhung bo qua chinh ban ghi hien tai.
 
             if (await _customerService.PhoneExistsAsync(customer.Phone, customer.Id))
             {
-                ModelState.AddModelError("Phone", "Số điện thoại này đã tồn tại.");
+                ModelState.AddModelError("Phone", "So dien thoai nay da ton tai.");
+            }
+
+            if (!string.IsNullOrWhiteSpace(customer.Email)
+                && await _customerService.EmailExistsAsync(customer.Email, customer.Id))
+            {
+                ModelState.AddModelError("Email", "Email nay da ton tai.");
             }
 
             if (ModelState.IsValid)
@@ -121,24 +138,25 @@ namespace SalesManagement.WebApp.Controllers
                 existingCustomer.Address = customer.Address;
 
                 await _customerService.UpdateCustomerAsync(existingCustomer);
-                TempData["SuccessMessage"] = "Cập nhật khách hàng thành công!";
+                TempData["SuccessMessage"] = "Cap nhat khach hang thanh cong!";
                 return RedirectToAction(nameof(Index));
             }
 
             return View(customer);
         }
 
+        // Day la diem xoa mem khach hang trong luong Sales.
         [Authorize(Roles = "Sales")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _customerService.DeleteCustomerAsync(id);
             if (result)
             {
-                TempData["SuccessMessage"] = "Đã ngừng hoạt động khách hàng thành công!";
+                TempData["SuccessMessage"] = "Da ngung hoat dong khach hang thanh cong!";
             }
             else
             {
-                TempData["ErrorMessage"] = "Không tìm thấy khách hàng!";
+                TempData["ErrorMessage"] = "Khong tim thay khach hang!";
             }
 
             return RedirectToAction(nameof(Index));
@@ -146,6 +164,7 @@ namespace SalesManagement.WebApp.Controllers
 
         private static void NormalizeCustomer(Customer customer)
         {
+            // Gom phan chuan hoa du lieu ve mot cho de luong them va sua xu ly giong nhau.
             customer.FullName = customer.FullName?.Trim() ?? string.Empty;
             customer.Phone = customer.Phone?.Trim() ?? string.Empty;
             customer.Email = string.IsNullOrWhiteSpace(customer.Email) ? null : customer.Email.Trim();

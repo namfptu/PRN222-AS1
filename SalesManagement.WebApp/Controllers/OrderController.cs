@@ -46,6 +46,7 @@ namespace SalesManagement.WebApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateOrderViewModel model)
         {
+            // Day la diem Sales tao don ban, chi cac dong co so luong > 0 moi duoc luu vao chi tiet don.
             var selectedItems = model.Items
                 .Where(i => i.Quantity > 0)
                 .Select(i => new OrderDetail
@@ -94,6 +95,7 @@ namespace SalesManagement.WebApp.Controllers
 
         public async Task<IActionResult> Details(int id)
         {
+            // Sales xem chi tiet don tai day va tu man nay co the in hoa don.
             var order = await _orderService.GetOrderByIdAsync(id);
             if (order == null)
             {
@@ -122,6 +124,7 @@ namespace SalesManagement.WebApp.Controllers
 
             if (string.Equals(returnTo, "Details", StringComparison.OrdinalIgnoreCase))
             {
+                // Dung chung 1 action cap nhat trang thai cho ca man danh sach va man chi tiet.
                 return RedirectToAction(nameof(Details), new { id });
             }
 
@@ -133,6 +136,7 @@ namespace SalesManagement.WebApp.Controllers
             var quantityLookup = sourceModel?.Items?
                 .ToDictionary(i => i.ProductId, i => i.Quantity) ?? new Dictionary<int, int>();
 
+            // Doc ton kho moi nhat tu DB de form tao don luon dung voi so luong co the ban.
             var products = await _productRepository.GetQueryable()
                 .Where(p => p.Status && p.Quantity > 0)
                 .OrderBy(p => p.Name)
@@ -156,6 +160,7 @@ namespace SalesManagement.WebApp.Controllers
 
         private async Task LoadCustomersAsync(int? selectedCustomerId = null)
         {
+            // Chi cho phep chon khach hang dang hoat dong khi Sales tao don moi.
             var customers = await _customerService.GetActiveCustomersAsync();
             ViewBag.Customers = new SelectList(
                 customers.Select(c => new
